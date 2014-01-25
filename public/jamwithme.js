@@ -65,12 +65,12 @@ function Note(pos, length, pitch) {
 function Track() {
     this.Init();
     this.noteImages = {
-        1: "piano_note_1", // Whole note
-        2: "piano_note_1", // Half note
-        4: "piano_note_1", // Quarter note
-        8: "piano_note_1", // 8th note
-        16: "piano_note_1", // 16th note
-        32: "piano_note_1"  // 32nd note
+        1: "note_whole", // Whole note
+        2: "note_half", // Half note
+        4: "note_quarter", // Quarter note
+        8: "note_eighth", // 8th note
+        16: "note_sixteenth", // 16th note
+        32: "note_thirtysecond"  // 32nd note
     };
     Track.INSTRUMENTS = {
         PIANO: 0,
@@ -94,6 +94,13 @@ Track.prototype.Init = function() {
 }
 
 Track.prototype.addNote = function(note) {
+    for(var i = 0; i < this.notes.length; i++) {
+        var n = this.notes[i];
+        if(n.pos == note.pos && n.pitch == note.pitch) {
+            this.notes.splice(i, 1);
+            break;
+        }
+    }
     this.notes.push(note);
 }
 
@@ -172,7 +179,11 @@ Track.prototype.Draw = function() {
         var img = this.noteImages[length];
         var x = Track.leftOffset + Track.measureSpacing * pos / 32;
         var y = 5 + tri * Track.trackSpacing + Track.lineSpacing * (3 - pitch);
-        c.drawImage(l(img), x, y);
+
+        var XOFF = -4;
+        var YOFF = -29; 
+
+        c.drawImage(l(img), x + XOFF, y + YOFF);
     }
 }
 
@@ -220,13 +231,33 @@ window.onmousemove = function(e) {
         if(minx <= mx && miny <= my && my <= maxy) {
             // Get pos, pitch
             var pos = Math.floor((mx - Track.leftOffset) * Track.getSnap() / Track.measureSpacing) * 32 / Track.getSnap();
-            var pitch = Math.floor((((5 + tri * Track.trackSpacing) - my) / Track.lineSpacing) * 2) / 2;
+            var pitch = Math.floor((((5 + tri * Track.trackSpacing + 6.5 * Track.lineSpacing) - my) / Track.lineSpacing) * 2) / 2;
 
-            var x = Track.leftOffset + parseInt($("#track-container").css("margin-left"), 10) + Track.measureSpacing * pos / 32;
-            var y = 5 + tri * Track.trackSpacing + Track.lineSpacing * (3 - pitch);
+            var x = -4 + Track.leftOffset + parseInt($("#track-container").css("margin-left"), 10) + Track.measureSpacing * pos / 32;
+            var y = -29 + 5 + tri * Track.trackSpacing + Track.lineSpacing * (10 - pitch);
             l("ghost_note").style.left = x + "px";
             l("ghost_note").style.top = y + "px";
             l("ghost_note").style.visibility = "visible";
+            switch(Track.getLength()) {
+                case 1:
+                    l("ghost_note").src = l("note_whole").src;
+                break;
+                case 2:
+                    l("ghost_note").src = l("note_half").src;
+                break;
+                case 4:
+                    l("ghost_note").src = l("note_quarter").src;
+                break;
+                case 8:
+                    l("ghost_note").src = l("note_eighth").src;
+                break;
+                case 16:
+                    l("ghost_note").src = l("note_sixteenth").src;
+                break;
+                case 32:
+                    l("ghost_note").src = l("note_thirtysecond").src;
+                break;
+            }
             break;
         }
         l("ghost_note").style.visibility = "hidden";
@@ -244,7 +275,7 @@ window.onclick = function(e) {
         if(minx <= mx && miny <= my && my <= maxy) {
             var pos = Math.floor((mx - Track.leftOffset) * Track.getSnap() / Track.measureSpacing) * 32 / Track.getSnap();
             var length = Track.getLength();
-            var pitch = Math.floor((((5 + tri * Track.trackSpacing + 4 * Track.lineSpacing) - my) / Track.lineSpacing) * 2) / 2;
+            var pitch = Math.floor((((5 + tri * Track.trackSpacing + 3.5 * Track.lineSpacing) - my) / Track.lineSpacing) * 2) / 2;
 
             var action = Track.getAction();
             if(action == "add") {
