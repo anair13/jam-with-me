@@ -1,4 +1,10 @@
 Catan::Application.routes.draw do
+  resources :songs
+
+
+  resources :user_entries
+
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
