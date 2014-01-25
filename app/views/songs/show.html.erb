@@ -17,6 +17,8 @@ window.onload = init;
 var context;
 var bufferLoader;
 
+var pianoBuffer = null;
+
 function init() {
   // Fix up prefixing
   window.AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -34,17 +36,28 @@ function init() {
 }
 
 function finishedLoading(bufferList) {
-  var source = context.createBufferSource();
-  source.buffer = bufferList[0];
-  source.connect(context.destination);
+  pianoBuffer = bufferList[0];
 
-  playTone(source, 2);
+  var startTime = context.currentTime + 0.100;
+  var tempo = 320; // BPM (beats per minute)
+  var eighthNoteTime = (60 / tempo) / 2;
+
+  // Play 2 bars of the following:
+  for (var bar = 0; bar < 2; bar++) {
+    var time = startTime + bar * 8 * eighthNoteTime;
+    playTone(2, time);
+  }
 }
 
-function playTone(source, semitones) {
+function playTone(semitones, time) {
+  var source = context.createBufferSource();
+  source.buffer = pianoBuffer;
+  source.connect(context.destination);
   var semitoneRatio = Math.pow(2, 1/12);
   source.playbackRate.value = Math.pow(semitoneRatio, semitones);
-  source.start(0);
+  if (!source.start)
+    source.start = source.noteOn;
+  source.start(time);
 }
 
 </script>
