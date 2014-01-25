@@ -9,24 +9,44 @@
     <div id='messagesDiv'></div>
     <input type='text' id='nameInput' placeholder='Name'>
     <input type='text' id='messageInput' placeholder='Message'>
+    <input type='text' id='testbox3' placeholder='frequency'>
     <script>
-      var myDataRef = new Firebase('https://r0phvg4qxq2.firebaseio-demo.com/');
-      $('#messageInput').keypress(function (e) {
-        if (e.keyCode == 13) {
-          var name = $('#nameInput').val();
-          var text = $('#messageInput').val();
-          myDataRef.push({name: name, text: text});
-          $('#messageInput').val('');
+      var MINUTES = 20;
+      var d = new Date();
+      var thissession = new Firebase('https://jamwithme.firebaseio.com/music/thissession');
+      thissession.on('value', function(snapshot) {
+        var session = snapshot.val();
+        var ID = session.ID;
+        var endTime = session.endTime;
+        var myDataRef = new Firebase('https://jamwithme.firebaseio.com/music/session'+ID);
+        $('#messageInput').keypress(function (e) {
+          var n = d.getTime();
+          if(n > endTime) {
+            killSession();
+          }
+          if (e.keyCode == 13) {
+            var name = $('#nameInput').val();
+            var text = $('#messageInput').val();
+            var frequency = $('#testbox3').val();
+            myDataRef.push({name: name, text: text, frequency: frequency});
+            $('#messageInput').val('');
+          }
+        });
+        myDataRef.on('child_added', function(snapshot) {
+          var message = snapshot.val();
+          displayChatMessage(message.name, message.text, message.frequency);
+        });
+        function displayChatMessage(name, text) {
+          $('<div/>').text(text).prepend($('<em/>').text(name+': ')).appendTo($('#messagesDiv'));
+          $('#messagesDiv')[0].scrollTop = $('#messagesDiv')[0].scrollHeight;
+        };
+        function killSession() {
+          var n = d.getTime();
+          var endTime = n + MINUTES * 60 * 1000;
+          thissession.set({ID: n, endTime: endTime});
+          location.reload(true);
         }
       });
-      myDataRef.on('child_added', function(snapshot) {
-        var message = snapshot.val();
-        displayChatMessage(message.name, message.text);
-      });
-      function displayChatMessage(name, text) {
-        $('<div/>').text(text).prepend($('<em/>').text(name+': ')).appendTo($('#messagesDiv'));
-        $('#messagesDiv')[0].scrollTop = $('#messagesDiv')[0].scrollHeight;
-      };
     </script>
   </body>
 </html>
