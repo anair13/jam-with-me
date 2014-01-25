@@ -2,6 +2,8 @@ var MINUTES = 20;
 var d = new Date();
 var startTime = d.getTime();
 var thissession = new Firebase('https://jamwithme.firebaseio.com/music/thissession');
+var notes = new Array();
+var notemap = new Array();
 thissession.on('value', function(snapshot) {
   var session = snapshot.val();
   var ID = session.ID;
@@ -27,8 +29,20 @@ thissession.on('value', function(snapshot) {
       var length = $('#length').val();
       var type = $('#type').val();
       var position = $('#position').val();
-      myDataRef.push({step: step, length: length, type:type, position: position});
-      $('#position').val('');
+      
+      if(length == '0') {
+        notes[notemap.indexOf([step,type,position].toString())].remove();
+        console.log(notemap);
+        console.log(notes);
+      } 
+      else {
+        notes.unshift(myDataRef.push());
+        console.log("notes: ",notes);
+        notes[0].set({step: step, length: length, type:type, position: position});
+        notemap.unshift([step, type, position].toString());
+        console.log("notemap: ",notemap);
+        $('#position').val('');
+      } 
     }
   });
   myDataRef.on('child_added', function(snapshot) {
@@ -65,8 +79,7 @@ function get_elapsed_time_string(total_seconds) {
     minutes = pretty_time_string(minutes);
     seconds = pretty_time_string(seconds);
 
-    // Compose the string for display
-    var currentTimeString = hours + ":" + minutes + ":" + seconds;
+    currentTimeString = hours + ":" + minutes + ":" + seconds;
 
     return currentTimeString;
 }  
