@@ -9,16 +9,21 @@
   <body>
     <div class="container">
       <div class="main-container no-margins">
-        <p>Main</p>
+        <div class="track-container">
+          <canvas id="drawCanvas"></canvas>
+        </div>
       </div>
       <div class="chat-container no-margins">
         <div class="chat-buffer-container no-margins">
           <p>Buffer</p>
         </div>
         <div class="chat-type-container no-margins">
-          <p>Type Here</p>
+          <input type="text" value="Type Here" />
         </div>
       </div>
     </div>
+    <!-- Inconsequential image dump referenced by JS -->
+    <img class="invisible" id="piano_note_1" src="./images/notes/piano_note_1.gif" />
+    <img id="ghost_note" class="no-margins" src="./images/notes/piano_note_1.gif" />
   </body>
 </html>
