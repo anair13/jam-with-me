@@ -6,33 +6,39 @@ thissession.on('value', function(snapshot) {
   var session = snapshot.val();
   var ID = session.ID;
   var endTime = session.endTime;
-  
+
   setInterval(function() {
     var thisDate = new Date();
     $('#box_header').text(get_elapsed_time_string(Math.floor((endTime - thisDate.getTime())/1000)));
   }, 1000);
+  var temp = d.getTime()
+  setTimeout(function() {
+    killSession();
+  },endTime - startTime);
+
   var myDataRef = new Firebase('https://jamwithme.firebaseio.com/music/session'+ID);
-  $('#messageInput').keypress(function (e) {
+  $('#position').keypress(function (e) {
     var n = d.getTime();
     if(n > endTime) {
       killSession();
     }
     if (e.keyCode == 13) {
-      var name = $('#nameInput').val();
-      var text = $('#messageInput').val();
-      var frequency = $('#testbox3').val();
-      myDataRef.push({name: name, text: text, frequency: frequency});
-      $('#messageInput').val('');
+      var step = $('#step').val();
+      var length = $('#length').val();
+      var type = $('#type').val();
+      var position = $('#position').val();
+      myDataRef.push({step: step, length: length, type:type, position: position});
+      $('#position').val('');
     }
   });
   myDataRef.on('child_added', function(snapshot) {
     var message = snapshot.val();
-    displayChatMessage(message.name, message.text, message.frequency);
+    displayChatMessage(message.step, message.length, message.frequency);
   });
 
 });
-function displayChatMessage(name, text) {
-  $('<div/>').text(text).prepend($('<em/>').text(name+': ')).appendTo($('#messagesDiv'));
+function displayChatMessage(step, length) {
+  $('<div/>').text(step).prepend($('<em/>').text(length+': ')).appendTo($('#messagesDiv'));
   $('#messagesDiv')[0].scrollTop = $('#messagesDiv')[0].scrollHeight;
 };
 function killSession() {
