@@ -232,6 +232,7 @@ window.onmousemove = function(e) {
             var pos = Math.floor((mx - Track.leftOffset) * Track.getSnap() / Track.measureSpacing) * 32 / Track.getSnap();
             var pitch = Math.floor(((5 + tri * Track.trackSpacing + 13 * Track.lineSpacing) - my) / Track.lineSpacing);
 
+            pitch = 0;
             var x = -4 + Track.leftOffset + parseInt($("#track-container").css("margin-left"), 10) + Track.measureSpacing * pos / 32;
             var y = -29 + 5 + tri * Track.trackSpacing + Track.lineSpacing * (20 - pitch);
             l("ghost_note").style.left = x + "px";
