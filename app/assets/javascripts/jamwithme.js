@@ -103,7 +103,7 @@ Track.prototype.addNote = function(note) {
     }
     this.notes.push(note);
     console.log(this.instrument);
-    editNote(note.pitch, note.length, this.instrument, note.pos);
+    editNote(note.pitch * 2, note.length, this.instrument, note.pos);
 }
 
 Track.prototype.removeNoteAtPos = function(pos, pitch) {
@@ -113,7 +113,7 @@ Track.prototype.removeNoteAtPos = function(pos, pitch) {
             this.notes.splice(i, 1);
         }
     }
-    editNote(pitch, 0, this.instrument, pos);
+    editNote(pitch * 2, 0, this.instrument, pos);
 }
 
 Track.getSnap = function() {
@@ -181,7 +181,7 @@ Track.prototype.Draw = function() {
         var pitch = note.pitch;
         var img = this.noteImages[length];
         var x = Track.leftOffset + Track.measureSpacing * pos / 32;
-        var y = 5 + tri * Track.trackSpacing + Track.lineSpacing * (6 - pitch);
+        var y = 5 + tri * Track.trackSpacing + Track.lineSpacing * (3 - pitch);
 
         var XOFF = -4;
         var YOFF = -29; 
@@ -225,16 +225,15 @@ window.onmousemove = function(e) {
     for(var tri = 0; tri < Controller.tracks.length; tri++) {
         var tr = Controller.tracks[tri];
         var minx = Track.leftOffset + parseInt($("#track-container").css("margin-left"), 10);
-        var miny = 5 + tri * Track.trackSpacing - Track.lineSpacing * 3;
-        var maxy = 5 + tri * Track.trackSpacing + Track.lineSpacing * 13;
+        var miny = 5 + tri * Track.trackSpacing - Track.lineSpacing * 1.5;
+        var maxy = 5 + tri * Track.trackSpacing + Track.lineSpacing * 6.5;
         if(minx <= mx && miny <= my && my <= maxy) {
             // Get pos, pitch
             var pos = Math.floor((mx - Track.leftOffset) * Track.getSnap() / Track.measureSpacing) * 32 / Track.getSnap();
-            var pitch = Math.floor(((5 + tri * Track.trackSpacing + 13 * Track.lineSpacing) - my) / Track.lineSpacing);
+            var pitch = Math.floor((((5 + tri * Track.trackSpacing + 6.5 * Track.lineSpacing) - my) / Track.lineSpacing) * 2) / 2;
 
-            pitch = 0;
             var x = -4 + Track.leftOffset + parseInt($("#track-container").css("margin-left"), 10) + Track.measureSpacing * pos / 32;
-            var y = -29 + 5 + tri * Track.trackSpacing + Track.lineSpacing * (20 - pitch);
+            var y = -29 + 5 + tri * Track.trackSpacing + Track.lineSpacing * (10 - pitch);
             l("ghost_note").style.left = x + "px";
             l("ghost_note").style.top = y + "px";
             l("ghost_note").style.visibility = "visible";
@@ -270,12 +269,12 @@ window.onclick = function(e) {
     for(var tri = 0; tri < Controller.tracks.length; tri++) {
         var tr = Controller.tracks[tri];
         var minx = Track.leftOffset;
-        var miny = 5 + tri * Track.trackSpacing - Track.lineSpacing * 3;
-        var maxy = 5 + tri * Track.trackSpacing + Track.lineSpacing * 13;
+        var miny = 5 + tri * Track.trackSpacing - Track.lineSpacing * 1.5;
+        var maxy = 5 + tri * Track.trackSpacing + Track.lineSpacing * 6.5;
         if(minx <= mx && miny <= my && my <= maxy) {
             var pos = Math.floor((mx - Track.leftOffset) * Track.getSnap() / Track.measureSpacing) * 32 / Track.getSnap();
             var length = Track.getLength();
-            var pitch = Math.floor(((5 + tri * Track.trackSpacing + 7 * Track.lineSpacing) - my) / Track.lineSpacing);
+            var pitch = Math.floor((((5 + tri * Track.trackSpacing + 3.5 * Track.lineSpacing) - my) / Track.lineSpacing) * 2) / 2;
 
             var action = Track.getAction();
             if(action == "add") {
