@@ -13,7 +13,17 @@
     margin: 40px;
     left: 0%;
     top: 0%;
-    height: 100%;
+    height: 70%;
+}
+
+.settings-container {
+    position: absolute;
+    display: inline-block;
+    margin: 40px;
+    left: 0%;
+    top: 70%;
+    width: 90%;
+    height: 20%;
 }
 
 .chat-container {
@@ -57,4 +67,9 @@
     display: block;
     opacity: 0.5;
     filter:alpha(opacity=50);
+}
+
+.drawing-canvas {
+    position: absolute;
+    display: block;
 }
