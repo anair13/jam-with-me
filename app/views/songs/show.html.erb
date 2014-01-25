@@ -13,31 +13,39 @@
 
 var context = new AudioContext;
 
-var source = null;
 // Fix up prefixing
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
 var context = new AudioContext();
 
-function loadSound(url) {
-  var request = new XMLHttpRequest();
-  request.open('GET', url, true);
-  request.responseType = 'arraybuffer';
+var request = new XMLHttpRequest();
+request.open("GET", "http://jamwithme.herokuapp.com/assets/c4.wav", true);
+request.responseType = "arraybuffer";
 
-  // Decode asynchronously
-  request.onload = function() {
-    context.decodeAudioData(request.response, function(buffer) {
-      source = buffer;
-    }, onError);
-  }
-  request.send();
-}
+var audioData; 
+
+// Our asynchronous callback
+request.onload = function() {
+    audioData = request.response;
+    createSoundSource(audioData);
+};
+request.send();
+
+// create a sound source
+soundSource = context.createBufferSource();
+ 
+// The Audio Context handles creating source
+// buffers from raw binary data
+soundBuffer = context.createBuffer(audioData, true/*make mono*/);
+ 
+// Add the buffered data to our object
+soundSource.buffer = soundBuffer;
 
 function playNote(semitones) {
   // Assume a new source was created from a buffer.
-  source.detune.value = semitones * 100;
-  source.start(0);
+  soundSource.detune.value = semitones * 100;
+  soundSource.start(0);
 }
 
-loadSound("../assets/c4.wav");
 playNote(0);
+
 </script>
