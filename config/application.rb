@@ -58,7 +58,8 @@ module Catan
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
-    
+
     config.assets.initialize_on_precompile = false
+    config.serve_static_assets = true
   end
 end
