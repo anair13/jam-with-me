@@ -7,7 +7,7 @@
     height: 100%;
 }
 
-.track-container {
+#track-container {
     position: relative;
     display: block;
     margin: 40px;

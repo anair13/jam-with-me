@@ -115,8 +115,9 @@ window.onload = function() {
 };
 
 window.onmousemove = function(e) {
+    //var mx = e.clientX - parseInt($("#track-container").css("margin-left"), 10);
     var mx = e.clientX;
-    var my = e.clientY;
+    var my = e.clientY - parseInt($("#track-container").css("margin-top"), 10);
     for(var tri = 0; tri < Controller.tracks.length; tri++) {
         var tr = Controller.tracks[tri];
         var miny = 5 + tri * Track.trackSpacing - Track.lineSpacing * 2.5;
@@ -136,8 +137,8 @@ window.onmousemove = function(e) {
 };
 
 window.onclick = function(e) {
-    var mx = e.clientX;
-    var my = e.clientY;
+    var mx = e.clientX - parseInt($("#track-container").css("margin-left"), 10);
+    var my = e.clientY - parseInt($("#track-container").css("margin-top"), 10);
     for(var tri = 0; tri < Controller.tracks.length; tri++) {
         var tr = Controller.tracks[tri];
         var miny = 5 + tri * Track.trackSpacing - Track.lineSpacing * 2.5;
@@ -145,7 +146,7 @@ window.onclick = function(e) {
         if(miny <= my && my <= maxy) {
             var pos = Math.floor(mx * 32 / Track.measureSpacing);
             var length = Controller.current_notetype;
-            var pitch = Math.floor((((5 + tri * Track.trackSpacing) - my) / Track.lineSpacing) * 2) / 2;
+            var pitch = Math.floor((((5 + tri * Track.trackSpacing + 4 * Track.lineSpacing) - my) / Track.lineSpacing) * 2) / 2;
 
             tr.addNote(new Note(pos, length, pitch));
             break;
