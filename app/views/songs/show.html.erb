@@ -15,7 +15,6 @@
 var context = new AudioContext();
 var firebase_song_identifier = "https://jamwithme.firebaseio.com/music/<%= @song.firebase_identifier %>";
 window.onload = init;
-var context;
 var bufferLoader;
 
 var buffers = new Array();
@@ -109,8 +108,8 @@ function init() {
   bufferLoader = new BufferLoader(
     context,
     [
-      "http://localhost:3000/assets/pianoc4.wav",
-      "http://localhost:3000/assets/violinc5.wav",
+      "../assets/pianoc4.wav",
+      "../assets/violinc5.wav",
 //    "http://localhost:3000/assets/guitarc4.wav"
     ],
     finishedLoading
@@ -138,7 +137,7 @@ function playNote(step, length, type, position) {
     var timeOff = timeOn + length * atomNoteTime;
     var source = getTone(step, bufferIndex);
     source.start(timeOn);
-    source.noteOff(timeOff)
+    source.noteOff(timeOff);
 }
 
 // Generates a source from a buffer and shifts it to the right tone
@@ -150,12 +149,50 @@ function getTone(semitones, bufferIndex) {
   source.playbackRate.value = Math.pow(semitoneRatio, semitones);
   if (!source.start)
     source.start = source.noteOn;
-  return source
+  return source;
+}
+
+var rec = new Recorder(context.destination, {workerPath: "/assets/recorderWorker.js"});
+
+function playback() {
+  rec.record();
+  playbackStartTime = context.currentTime + 0.100;
+  var myDataRef = new Firebase(firebase_song_identifier);
+  myDataRef.on('child_added', function(snapshot) {
+    var message = snapshot.val();
+    playNote(message.step, message.length, message.type, message.position);
+  });
+}
+
+function stopRecording() {
+    rec.stop();
+    createDownloadLink();
+    
+    rec.clear();
+  }
+
+function createDownloadLink() {
+    rec && recorder.exportWAV(function(blob) {
+      var url = URL.createObjectURL(blob);
+      var li = document.createElement('li');
+      var au = document.createElement('audio');
+      var hf = document.createElement('a');
+      
+      au.controls = true;
+      au.src = url;
+      hf.href = url;
+      hf.download = new Date().toISOString() + '.wav';
+      hf.innerHTML = hf.download;
+      li.appendChild(au);
+      li.appendChild(hf);
+      recordingslist.appendChild(li);
+    });
 }
 
 </script>
 
-<input id="clickMe" type="button" value="clickme" onclick="playback();" />
+<input id="clickMe" type="button" value="Play" onclick="playback();" />
+<input id="clickMe" type="button" value="Stop Recording" onclick="stopRecording();" />
 
 <div id="box_header">&nbsp;</div>
 <div id='messagesDiv'></div>
@@ -163,3 +200,6 @@ function getTone(semitones, bufferIndex) {
 <input type='text' id='length' placeholder='length'>
 <input type='text' id='type' placeholder='type'>
 <input type='text' id='position' placeholder='position'>
+
+<h2>Recordings</h2>
+<ul id="recordingslist"></ul>
