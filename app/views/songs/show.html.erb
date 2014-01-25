@@ -20,6 +20,11 @@ var bufferLoader;
 
 var buffers = new Array();
 var notes = new Array();
+
+var playbackStartTime = context.currentTime + 0.100;
+var tempo = 80; // BPM (beats per minute)
+var atomNoteTime = (60 / tempo) / 8; // 32nd note
+
 var MINUTES = 20;
 var d = new Date();
 var startTime = d.getTime();
@@ -55,20 +60,23 @@ thissession.on('value', function(snapshot) {
   });
   myDataRef.on('child_added', function(snapshot) {
     var message = snapshot.val();
-    playTone(message.step, message.position, 0);
+    playNote(message.step, message.length, message.type, message.position);
   });
 
 });
+
 function displayChatMessage(step, length) {
   $('<div/>').text(step).prepend($('<em/>').text(length+': ')).appendTo($('#messagesDiv'));
   $('#messagesDiv')[0].scrollTop = $('#messagesDiv')[0].scrollHeight;
 };
+
 function killSession() {
   var n = d.getTime();
   var endTime = n + MINUTES * 60 * 1000;
   thissession.set({ID: n, endTime: endTime});
   location.reload(true);
 }
+
 function get_elapsed_time_string(total_seconds) {
     function pretty_time_string(num) {
       return ( num < 10 ? "0" : "" ) + num;
@@ -115,7 +123,26 @@ function finishedLoading(bufferList) {
   buffers = bufferList;
 }
 
-function playTone(semitones, time, bufferIndex) {
+function playNote(step, length, type, position) {
+    // convert type of instrument to corresponding bufferIndex
+    bufferIndex = 0;
+    switch (type) {
+        case "piano":
+            bufferIndex = 1;
+        case "violin":
+            bufferIndex = 2;
+        default:
+            bufferIndex = 0;
+    }
+    var timeOn = playbackStartTime + position * atomNoteTime;
+    var timeOff = timeOn + length * atomNoteTime;
+    var source = getTone(step, bufferIndex);
+    source.start(timeOn);
+    source.noteOff(timeOff)
+}
+
+// Generates a source from a buffer and shifts it to the right tone
+function getTone(semitones, bufferIndex) {
   var source = context.createBufferSource();
   source.buffer = buffers[bufferIndex];
   source.connect(context.destination);
@@ -123,21 +150,7 @@ function playTone(semitones, time, bufferIndex) {
   source.playbackRate.value = Math.pow(semitoneRatio, semitones);
   if (!source.start)
     source.start = source.noteOn;
-  source.start(time);
-}
-
-function playback() {
-  var startTime = context.currentTime + 0.100;
-  var tempo = 320; // BPM (beats per minute)
-  var eighthNoteTime = (60 / tempo) / 2;
-
-  // Play 2 bars of the following:
-  for (var bar = 0; bar < 2; bar++) {
-    var time = startTime + bar * 8 * eighthNoteTime;
-    playTone(0, time, 0);
-    playTone(0, time, 1);
-//    playTone(0, time, 2);
-  }
+  return source
 }
 
 </script>
