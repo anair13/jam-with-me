@@ -11,41 +11,40 @@
 
 <script type="text/javascript">
 
-var context = new AudioContext;
-
-// Fix up prefixing
-window.AudioContext = window.AudioContext || window.webkitAudioContext;
 var context = new AudioContext();
 
-var request = new XMLHttpRequest();
-request.open("GET", "http://jamwithme.herokuapp.com/assets/c4.wav", true);
-request.responseType = "arraybuffer";
+window.onload = init;
+var context;
+var bufferLoader;
 
-var audioData; 
+function init() {
+  // Fix up prefixing
+  window.AudioContext = window.AudioContext || window.webkitAudioContext;
+  context = new AudioContext();
 
-// Our asynchronous callback
-request.onload = function() {
-    audioData = request.response;
-    createSoundSource(audioData);
-};
-request.send();
+  bufferLoader = new BufferLoader(
+    context,
+    [
+      "http://localhost:3000/assets/c4.wav",
+    ],
+    finishedLoading
+    );
 
-// create a sound source
-soundSource = context.createBufferSource();
- 
-// The Audio Context handles creating source
-// buffers from raw binary data
-soundBuffer = context.createBuffer(audioData, true/*make mono*/);
- 
-// Add the buffered data to our object
-soundSource.buffer = soundBuffer;
-
-function playNote(semitones) {
-  // Assume a new source was created from a buffer.
-  soundSource.detune.value = semitones * 100;
-  soundSource.start(0);
+  bufferLoader.load();
 }
 
-playNote(0);
+function finishedLoading(bufferList) {
+  var source = context.createBufferSource();
+  source.buffer = bufferList[0];
+  source.connect(context.destination);
+
+  playTone(source, 2);
+}
+
+function playTone(source, semitones) {
+  var semitoneRatio = Math.pow(2, 1/12);
+  source.playbackRate.value = Math.pow(semitoneRatio, semitones);
+  source.start(0);
+}
 
 </script>
