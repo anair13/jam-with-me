@@ -11,13 +11,87 @@
 
 <script type="text/javascript">
 
-var context = new AudioContext();
 
+var context = new AudioContext();
+var firebase_song_identifier = "https://jamwithme.firebaseio.com/music/<%= @song.firebase_identifier %>";
 window.onload = init;
 var context;
 var bufferLoader;
 
-var pianoBuffer = null;
+var buffers = new Array();
+var notes = new Array();
+var MINUTES = 20;
+var d = new Date();
+var startTime = d.getTime();
+var thissession = new Firebase('https://jamwithme.firebaseio.com/music/thissession');
+thissession.on('value', function(snapshot) {
+  var session = snapshot.val();
+  var ID = session.ID;
+  var endTime = session.endTime;
+
+  setInterval(function() {
+    var thisDate = new Date();
+    $('#box_header').text(get_elapsed_time_string(Math.floor((endTime - thisDate.getTime())/1000)));
+  }, 1000);
+  var temp = d.getTime()
+  setTimeout(function() {
+    killSession();
+  },endTime - startTime);
+
+  var myDataRef = new Firebase(firebase_song_identifier);
+  $('#position').keypress(function (e) {
+    var n = d.getTime();
+    if(n > endTime) {
+      killSession();
+    }
+    if (e.keyCode == 13) {
+      var step = $('#step').val();
+      var length = $('#length').val();
+      var type = $('#type').val();
+      var position = $('#position').val();
+      myDataRef.push({step: step, length: length, type:type, position: position});
+      $('#position').val('');
+    }
+  });
+  myDataRef.on('child_added', function(snapshot) {
+    var message = snapshot.val();
+    playTone(message.step, message.position, 0);
+  });
+
+});
+function displayChatMessage(step, length) {
+  $('<div/>').text(step).prepend($('<em/>').text(length+': ')).appendTo($('#messagesDiv'));
+  $('#messagesDiv')[0].scrollTop = $('#messagesDiv')[0].scrollHeight;
+};
+function killSession() {
+  var n = d.getTime();
+  var endTime = n + MINUTES * 60 * 1000;
+  thissession.set({ID: n, endTime: endTime});
+  location.reload(true);
+}
+function get_elapsed_time_string(total_seconds) {
+    function pretty_time_string(num) {
+      return ( num < 10 ? "0" : "" ) + num;
+    }
+
+    var hours = Math.floor(total_seconds / 3600);
+    total_seconds = total_seconds % 3600;
+
+    var minutes = Math.floor(total_seconds / 60);
+    total_seconds = total_seconds % 60;
+
+    var seconds = Math.floor(total_seconds);
+
+    // Pad the minutes and seconds with leading zeros, if required
+    hours = pretty_time_string(hours);
+    minutes = pretty_time_string(minutes);
+    seconds = pretty_time_string(seconds);
+
+    // Compose the string for display
+    var currentTimeString = hours + ":" + minutes + ":" + seconds;
+
+    return currentTimeString;
+}
 
 function init() {
   // Fix up prefixing
@@ -27,7 +101,9 @@ function init() {
   bufferLoader = new BufferLoader(
     context,
     [
-      "http://localhost:3000/assets/c4.wav",
+      "http://localhost:3000/assets/pianoc4.wav",
+      "http://localhost:3000/assets/violinc5.wav",
+//    "http://localhost:3000/assets/guitarc4.wav"
     ],
     finishedLoading
     );
@@ -36,22 +112,12 @@ function init() {
 }
 
 function finishedLoading(bufferList) {
-  pianoBuffer = bufferList[0];
-
-  var startTime = context.currentTime + 0.100;
-  var tempo = 320; // BPM (beats per minute)
-  var eighthNoteTime = (60 / tempo) / 2;
-
-  // Play 2 bars of the following:
-  for (var bar = 0; bar < 2; bar++) {
-    var time = startTime + bar * 8 * eighthNoteTime;
-    playTone(2, time);
-  }
+  buffers = bufferList;
 }
 
-function playTone(semitones, time) {
+function playTone(semitones, time, bufferIndex) {
   var source = context.createBufferSource();
-  source.buffer = pianoBuffer;
+  source.buffer = buffers[bufferIndex];
   source.connect(context.destination);
   var semitoneRatio = Math.pow(2, 1/12);
   source.playbackRate.value = Math.pow(semitoneRatio, semitones);
@@ -60,4 +126,27 @@ function playTone(semitones, time) {
   source.start(time);
 }
 
+function playback() {
+  var startTime = context.currentTime + 0.100;
+  var tempo = 320; // BPM (beats per minute)
+  var eighthNoteTime = (60 / tempo) / 2;
+
+  // Play 2 bars of the following:
+  for (var bar = 0; bar < 2; bar++) {
+    var time = startTime + bar * 8 * eighthNoteTime;
+    playTone(0, time, 0);
+    playTone(0, time, 1);
+//    playTone(0, time, 2);
+  }
+}
+
 </script>
+
+<input id="clickMe" type="button" value="clickme" onclick="playback();" />
+
+<div id="box_header">&nbsp;</div>
+<div id='messagesDiv'></div>
+<input type='text' id='step' placeholder='step'>
+<input type='text' id='length' placeholder='length'>
+<input type='text' id='type' placeholder='type'>
+<input type='text' id='position' placeholder='position'>

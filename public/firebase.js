@@ -69,4 +69,4 @@ function get_elapsed_time_string(total_seconds) {
     var currentTimeString = hours + ":" + minutes + ":" + seconds;
 
     return currentTimeString;
-}  
+}
