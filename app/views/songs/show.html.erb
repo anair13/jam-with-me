@@ -11,6 +11,33 @@
 
 <script type="text/javascript">
 
-T("sin", {freq:880, mul:0.5}).play();
+var context = new AudioContext;
 
+var source = null;
+// Fix up prefixing
+window.AudioContext = window.AudioContext || window.webkitAudioContext;
+var context = new AudioContext();
+
+function loadSound(url) {
+  var request = new XMLHttpRequest();
+  request.open('GET', url, true);
+  request.responseType = 'arraybuffer';
+
+  // Decode asynchronously
+  request.onload = function() {
+    context.decodeAudioData(request.response, function(buffer) {
+      source = buffer;
+    }, onError);
+  }
+  request.send();
+}
+
+function playNote(semitones) {
+  // Assume a new source was created from a buffer.
+  source.detune.value = semitones * 100;
+  source.start(0);
+}
+
+loadSound("../assets/c4.wav");
+playNote(0);
 </script>
