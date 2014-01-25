@@ -1,14 +1,5 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <b>Firebase identifier:</b>
-  <%= @song.firebase_identifier %>
-</p>
-
-
-<%= link_to 'Edit', edit_song_path(@song) %> |
-<%= link_to 'Back', songs_path %>
-
 <script type="text/javascript">
 
 
@@ -19,7 +10,9 @@ var bufferLoader;
 
 var buffers = new Array();
 var notes = new Array();
-
+var notemap = new Array();
+var noteRefs = new Array();
+var endTime;
 var playbackStartTime = context.currentTime + 0.100;
 var tempo = 80; // BPM (beats per minute)
 var atomNoteTime = (60 / tempo) / 8; // 32nd note
@@ -31,7 +24,7 @@ var thissession = new Firebase('https://jamwithme.firebaseio.com/music/thissessi
 thissession.on('value', function(snapshot) {
   var session = snapshot.val();
   var ID = session.ID;
-  var endTime = session.endTime;
+  endTime = session.endTime;
 
   setInterval(function() {
     var thisDate = new Date();
@@ -40,28 +33,35 @@ thissession.on('value', function(snapshot) {
   var temp = d.getTime()
   setTimeout(function() {
     killSession();
-  },endTime - startTime);
+  }, endTime - startTime);
+});
 
-  var myDataRef = new Firebase(firebase_song_identifier);
-  $('#position').keypress(function (e) {
-    var n = d.getTime();
-    if(n > endTime) {
-      killSession();
-    }
-    if (e.keyCode == 13) {
-      var step = $('#step').val();
-      var length = $('#length').val();
-      var type = $('#type').val();
-      var position = $('#position').val();
-      myDataRef.push({step: step, length: length, type:type, position: position});
-      $('#position').val('');
-    }
-  });
-  myDataRef.on('child_added', function(snapshot) {
-    var message = snapshot.val();
-    playNote(message.step, message.length, message.type, message.position);
-  });
+var myDataRef = new Firebase(firebase_song_identifier);
 
+function editNote(step, length, type, position) {
+  var n = d.getTime();
+  if(n > endTime) {
+    killSession();
+  }
+  
+  if(length == '0') {
+    noteRefs[notemap.indexOf([step,type,position].toString())].remove();
+    console.log(notemap);
+    console.log(noteRefs);
+  }
+  else {
+    noteRefs.unshift(myDataRef.push());
+    console.log("noteRefs: ",noteRefs);
+    noteRefs[0].set({step: step, length: length, type:type, position: position});
+    notemap.unshift([step, type, position].toString());
+    console.log("notemap: ",notemap);
+    $('#position').val('');
+  }
+}
+
+myDataRef.on('child_added', function(snapshot) {
+  var message = snapshot.val();
+  playNote(message.step, message.length, message.type, message.position);
 });
 
 function displayChatMessage(step, length) {
@@ -102,6 +102,7 @@ function get_elapsed_time_string(total_seconds) {
 
 function init() {
   // Fix up prefixing
+  Controller.Init();
   window.AudioContext = window.AudioContext || window.webkitAudioContext;
   context = new AudioContext();
 
@@ -191,15 +192,56 @@ function playback() {
 
 </script>
 
-<!-- <input id="clickMe" type="button" value="Play" onclick="playback();" />
-<input id="clickMe" type="button" value="Stop Recording" onclick="stopRecording();" />
- -->
-<div id="box_header">&nbsp;</div>
-<div id='messagesDiv'></div>
-<input type='text' id='step' placeholder='step'>
-<input type='text' id='length' placeholder='length'>
-<input type='text' id='type' placeholder='type'>
-<input type='text' id='position' placeholder='position'>
-
-<h2>Recordings</h2>
-<ul id="recordingslist"></ul>
+<div class="container">
+  <div class="main-container no-margins">
+    <div id="track-container">
+      <canvas class="drawing-canvas" id="drawCanvas"></canvas>
+      <canvas class="drawing-canvas" id="drawCanvas2"></canvas>
+    </div>
+    <div class="settings-container">
+      <div style="float: left; width: 40%">
+        <b>Snap To:</b><br>
+        <input type="radio" name="settings_snap" value="4" checked="checked">Quarter Notes<br>
+        <input type="radio" name="settings_snap" value="8">Eighth Notes<br>
+        <input type="radio" name="settings_snap" value="16">16th Notes<br>
+        <input type="radio" name="settings_snap" value="32">32nd Notes<br>
+      </div>
+      <div style="float: left; width: 40%">
+        <b>Note Type:</b><br>
+        <input type="radio" name="settings_length" value="1">Whole Notes<br>
+        <input type="radio" name="settings_length" value="2">Half Notes<br>
+        <input type="radio" name="settings_length" value="4" checked="checked">Quarter Notes<br>
+        <input type="radio" name="settings_length" value="8">Eighth Notes<br>
+        <input type="radio" name="settings_length" value="16">16th Notes<br>
+        <input type="radio" name="settings_length" value="32">32nd Notes<br>
+      </div>
+      <div>
+        <b>Action:</b><br>
+        <input type="radio" name="settings_action" value="add" checked="checked">Add Note<br>
+        <input type="radio" name="settings_action" value="remove">Remove Note<br>
+      </div>
+    </div>
+  </div>
+  <div class="chat-container no-margins">
+    <div class="chat-buffer-container no-margins">
+      <p>Buffer</p>
+    </div>
+    <div class="chat-type-container no-margins">
+      <input type="text" value="Type Here" />
+    </div>
+  </div>
+</div>
+<!-- Inconsequential image dump referenced by JS -->
+<img class="invisible" id="note_whole" src="../assets/notes/whole.png" />
+<img class="invisible" id="note_half" src="../assets/notes/half.png" />
+<img class="invisible" id="note_quarter" src="../assets/notes/quarter.png" />
+<img class="invisible" id="note_eighth" src="../assets/notes/eighth.png" />
+<img class="invisible" id="note_sixteenth" src="../assets/notes/sixteenth.png" />
+<img class="invisible" id="note_thirtysecond" src="../assets/notes/thirtysecond.png" />
+<img class="invisible" id="instrument_piano" src="http://placehold.it/50x50" />
+<img class="invisible" id="instrument_drums" src="http://placehold.it/50x50" />
+<img class="invisible" id="instrument_violin" src="http://placehold.it/50x50" />
+<img class="invisible" id="instrument_synth" src="http://placehold.it/50x50" />
+<img class="invisible" id="clef_treble" src="../assets/clefs/treble_clef.gif" />
+<img class="invisible" id="clef_bass" src="../assets/clefs/bass_clef.png" />
+<img id="ghost_note" class="invisible no-margins" src="../assets/notes/piano_note_1.gif" />
