@@ -103,7 +103,7 @@ Track.prototype.addNote = function(note) {
     }
     this.notes.push(note);
     console.log(this.instrument);
-    editNote(note.pitch, note.length, this.instrument, note.pos);
+    editNote(note.pitch * 2, note.length, this.instrument, note.pos);
 }
 
 Track.prototype.removeNoteAtPos = function(pos, pitch) {
@@ -113,7 +113,7 @@ Track.prototype.removeNoteAtPos = function(pos, pitch) {
             this.notes.splice(i, 1);
         }
     }
-    editNote(pitch, 0, this.instrument, pos);
+    editNote(pitch * 2, 0, this.instrument, pos);
 }
 
 Track.getSnap = function() {

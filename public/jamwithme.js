@@ -11,6 +11,8 @@ Controller.Init = function() {
     Controller.timeLeft = 0;
     Controller.current_canvas = 0;
 
+    Controller.firebase = new Firebase('https://jamwithme.firebaseio.com/music/session' + ID);
+
     var cv = l("drawCanvas");
     cv.width = cv.parentNode.offsetWidth;
     cv.height = cv.parentNode.offsetHeight;
