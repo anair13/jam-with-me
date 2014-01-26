@@ -25,7 +25,6 @@ Controller.Init = function() {
 Controller.Update = function() {
     /* Update variables */
     
-
     /* Drawing */
     
     // Clear
