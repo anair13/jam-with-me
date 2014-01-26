@@ -96,12 +96,6 @@ function Track() {
         16: "note_sixteenth", // 16th note
         32: "note_thirtysecond"  // 32nd note
     };
-    Track.INSTRUMENTS = {
-        PIANO: 0,
-        SYNTH: 1,
-        VIOLIN: 2,
-        DRUMS: 3
-    };
     this.instrument = -1;
     this.instrumentImage = "";
     this.clefImage = "";
