@@ -113,7 +113,7 @@ function init() {
 
         setInterval(function () {
             var thisDate = new Date();
-            $('#box_header').text(get_elapsed_time_string(Math.floor((endTime - thisDate.getTime()) / 1000)));
+            $('#timer').text(get_elapsed_time_string(Math.floor((endTime - thisDate.getTime()) / 1000)));
         }, 1000);
     });
 
