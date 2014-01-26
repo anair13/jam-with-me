@@ -117,17 +117,13 @@ function init() {
     myDataRef.on('child_added', function (snapshot) {
         var message = snapshot.val();
 
-        console.log("HERB");
         playNote(message.step, message.length, message.type, 0);
 
-        console.log("LOLL");
-        console.log(message);
         Controller.handleNewNote(message.position, message.length, message.step, message.type);
     });
 }
 
 function playNote(step, length, type, position) {
-    console.log(step, length, type, position);
     // convert type of instrument to corresponding bufferIndex
     bufferIndex = 0;
     switch (type) {
