@@ -311,28 +311,29 @@ window.onmousemove = function(e) {
 };
 
 window.onclick = function(e) {
-    var mx = e.clientX - parseInt($("#track-container").css("margin-left"), 10);
-    var my = e.clientY - parseInt($("#track-container").css("margin-top"), 10);
-    for(var tri = 0; tri < Controller.tracks.length; tri++) {
-        var tr = Controller.tracks[tri];
-        var minx = Track.leftOffset;
-        var maxx = parseInt($("#track-container").css("width"), 10);
-        var miny = 5 + tri * Track.trackSpacing - Track.lineSpacing * 1.5;
-        var maxy = 5 + tri * Track.trackSpacing + Track.lineSpacing * 6.5;
-        if(minx <= mx && mx <= maxx && miny <= my && my <= maxy) {
-            var pos = Math.round((mx - Track.leftOffset) * Track.getSnap() / Track.measureSpacing) * 32 / Track.getSnap() + Controller.measureOffset * 32;
-            var length = Track.getLength();
-            var pitch = Math.floor((((5 + tri * Track.trackSpacing + 3.5 * Track.lineSpacing) - my) / Track.lineSpacing) * 2) / 2;
+    if(!$(".user-overlay").is(":visible")) {
+        var mx = e.clientX - parseInt($("#track-container").css("margin-left"), 10);
+        var my = e.clientY - parseInt($("#track-container").css("margin-top"), 10);
+        for(var tri = 0; tri < Controller.tracks.length; tri++) {
+            var tr = Controller.tracks[tri];
+            var minx = Track.leftOffset;
+            var maxx = parseInt($("#track-container").css("width"), 10);
+            var miny = 5 + tri * Track.trackSpacing - Track.lineSpacing * 1.5;
+            var maxy = 5 + tri * Track.trackSpacing + Track.lineSpacing * 6.5;
+            if(minx <= mx && mx <= maxx && miny <= my && my <= maxy) {
+                var pos = Math.round((mx - Track.leftOffset) * Track.getSnap() / Track.measureSpacing) * 32 / Track.getSnap() + Controller.measureOffset * 32;
+                var length = Track.getLength();
+                var pitch = Math.floor((((5 + tri * Track.trackSpacing + 3.5 * Track.lineSpacing) - my) / Track.lineSpacing) * 2) / 2;
 
-            var action = Track.getAction();
-            if(action == "add") {
-                tr.addNote(new Note(pos, length, pitch));
+                var action = Track.getAction();
+                if(action == "add") {
+                    tr.addNote(new Note(pos, length, pitch));
+                }
+                else if(action == "remove") {
+                    tr.removeNoteAtPos(pos, pitch);
+                }
+                break;
             }
-            else if(action == "remove") {
-                tr.removeNoteAtPos(pos, pitch);
-            }
-            break;
         }
     }
-    
 };
