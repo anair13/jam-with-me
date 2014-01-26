@@ -18,6 +18,7 @@ var MINUTES = 20;
 var d = new Date();
 var startTime = d.getTime();
 var myDataRef;
+var dataUserRef;
 
 function editNote(step, length, type, position) {
     var n = d.getTime();
@@ -143,8 +144,7 @@ function init() {
       var message = snapshot.val();
       displayChatMessage(message.name, message.text);
     });
-    var dataUserRef = new Firebase(firebase_userlist_identifier);
-    dataUserRef.push({user: Controller.username});
+    dataUserRef = new Firebase(firebase_userlist_identifier);
     dataUserRef.on('child_added', function(snapshot) {
         var user = snapshot.val();
         displayUser(user.user);
@@ -202,7 +202,7 @@ function displayChatMessage(name, text) {
 }
 function displayUser(user) {
     var users = $("#chat-users").val();
-    users += user : "\n";
+    users += user + "\n";
     $("#chat-users").val(users);
     l('chat-users').scrollTop = l('chat-users').scrollHeight;
 }

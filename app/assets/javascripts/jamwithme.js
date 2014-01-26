@@ -26,6 +26,7 @@ Controller.Init = function() {
 Controller.chooseName = function() {
     $(".user-overlay").hide();
     Controller.username = $("#name-box").val();
+    dataUserRef.push({user: Controller.username});
 }
 
 Controller.Update = function() {
