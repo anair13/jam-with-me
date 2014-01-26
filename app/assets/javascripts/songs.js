@@ -137,6 +137,22 @@ function init() {
       var message = snapshot.val();
       displayChatMessage(message.name, message.text);
     });
+
+    var name;
+    $('#message').keypress(function (e) {
+        if (e.keyCode == 13) {
+          var name = username;
+          var text = $('#message').val();
+          chatDataRef.push({name: name, text: text});
+          $('#message').val('');
+           
+        }
+    });
+
+    $('#name').keypress(function (e) {
+        name = $('#name').val();
+        $('#name').val('');
+    });
 }
 
 function playNote(step, length, type, position) {
@@ -177,28 +193,6 @@ function playback() {
         playNote(message.step, message.length, message.type, message.position);
     });
 }
-
-var chatDataRef = new Firebase(firebase_chat_identifier);
-var name;
-$('#message').keypress(function (e) {
-    if (e.keyCode == 13) {
-      var name = username;
-      var text = $('#message').val();
-      chatDataRef.push({name: name, text: text});
-      $('#message').val('');
-       
-    }
-});
-
-chatDataRef.on('child_added', function(snapshot) {
-  var message = snapshot.val();
-  displayChatMessage(message.name, message.text);
-});
-
-$('#name').keypress(function (e) {
-    name = $('#name').val();
-    $('#name').val('');
-});
 
 function displayChatMessage(name, text) {
   var oldtext = $("#chat-messages").val();

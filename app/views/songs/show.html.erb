@@ -6,17 +6,6 @@ var firebase_chat_identifier = "https://jamwithme.firebaseio.com/chat/<%= @song.
 var firebase_userlist_identifier = "https://jamwithme.firebaseio.com/users/<%= @song.firebase_identifier %>";
 var endTime = <%= @song.firebase_identifier.slice(7..-1) %> + 1 * 60 * 1000;
 </script>
-<link rel="stylesheet" href="../../assets/javascripts/fancyBox/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
-<script type="text/javascript" src="../../assets/javascripts/fancyBox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-
-<script type="text/javascript">
-  $(document).ready(function() {
-    $(".fancybox").fancybox();
-  });
-</script>
-
-<a class="fancybox" rel="group">Please Enter your Name:</a>
-<a class="fancybox" rel="group"><input type="text" id="name" name="name" value="name"></input></a>
 
 <div class="container">
   <div class="main-container no-margins">
