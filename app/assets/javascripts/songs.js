@@ -42,8 +42,10 @@ function editNote(step, length, type, position) {
 }
 
 function displayChatMessage(step, length) {
-    $('<div/>').text(step).prepend($('<em/>').text(length + ': ')).appendTo($('#messagesDiv'));
-    $('#messagesDiv')[0].scrollTop = $('#messagesDiv')[0].scrollHeight;
+    var oldtext = $("#chat-messages").val();
+    oldtext += Controller.username + ": " + text + "\n";
+    $("#chat-messages").val(oldtext);
+    $('#chat-messages').scrollTop = $('#chat-messages').scrollHeight;
 };
 
 function killSession() {
