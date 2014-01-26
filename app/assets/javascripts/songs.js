@@ -182,9 +182,9 @@ function playback() {
 }
 
 function displayChatMessage(name, text) {
-  var oldtext = $("#chat-messages").value();
+  var oldtext = $("#chat-messages").val();
   oldtext += name + ": " + text + "\n";
-  $("#chat-messages").value(oldtext);
+  $("#chat-messages").val(oldtext);
 }
 
 function newSong() {
