@@ -22,7 +22,7 @@ var endTime = <%= @song.firebase_identifier.slice(7..-1) %> + 1 * 60 * 1000;
     </div>
     <div id="nav-container">
       <input type="button" value="<" onclick="Controller.scrollLeft();">
-        <b><p id="measure-text">Measure 0</p></b>
+        <b><div id="measure-text">Measure 0</div></b>
       <input type="button" value=">" onclick="Controller.scrollRight();">
     </div>
     <div class="settings-container">
