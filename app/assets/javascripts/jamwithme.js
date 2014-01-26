@@ -28,6 +28,7 @@ Controller.chooseName = function() {
     $(".user-overlay").hide();
     Controller.username = $("#name-box").val();
     dataUserRef.push({user: Controller.username});
+    var user=setCookie("username", Controller.username, 1);
 }
 
 Controller.chooseNameEnter = function(e) {
