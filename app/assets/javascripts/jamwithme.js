@@ -218,7 +218,7 @@ Track.prototype.Draw = function() {
         var length = note.length;
         var pitch = note.pitch;
         var img = this.noteImages[length];
-        var x = Track.leftOffset + Track.measureSpacing * (pos / 32) - Controller.measureOffset;
+        var x = Track.leftOffset + Track.measureSpacing * ((pos / 32) - Controller.measureOffset);
         var y = 5 + tri * Track.trackSpacing + Track.lineSpacing * (3 - pitch);
 
         if(Track.leftOffset - 28 <= x && x <= Track.leftOffset + cv.width) {
