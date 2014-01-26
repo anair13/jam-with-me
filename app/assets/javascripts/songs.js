@@ -141,6 +141,13 @@ function init() {
       var message = snapshot.val();
       displayChatMessage(message.name, message.text);
     });
+    var dataUserRef = new Firebase(firebase_userlist_identifier);
+    dataUserRef.push({user: Controller.username});
+    dataUserRef.on('child_added', function(snapshot) {
+        var user = snapshot.val();
+        displayUser(user.user);
+    })
+
 }
 
 function playNote(step, length, type, position) {
@@ -190,6 +197,12 @@ function displayChatMessage(name, text) {
   oldtext += name + ": " + text + "\n";
   $("#chat-messages").val(oldtext);
   l('chat-messages').scrollTop = l('chat-messages').scrollHeight;
+}
+function displayUser(user) {
+    var users = $("#chat-users").val();
+    users += user : "\n";
+    $("#chat-users").val(users);
+    l('chat-users').scrollTop = l('chat-users').scrollHeight;
 }
 
 function newSong() {
