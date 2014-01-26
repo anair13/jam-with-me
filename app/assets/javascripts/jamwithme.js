@@ -23,7 +23,7 @@ Controller.Init = function() {
 }
 
 Controller.chooseName = function() {
-    $(".user-overlay").style.visibility = "hidden";
+    $(".user-overlay").hide();
     alert("Username: " + $("#name-box").val());
 }
 
