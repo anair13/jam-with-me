@@ -139,22 +139,6 @@ function init() {
       var message = snapshot.val();
       displayChatMessage(message.name, message.text);
     });
-
-    var name;
-    $('#message').keypress(function (e) {
-        if (e.keyCode == 13) {
-          var name = Controller.username;
-          var text = $('#message').val();
-          chatDataRef.push({name: name, text: text});
-          $('#message').val('');
-           
-        }
-    });
-
-    $('#name').keypress(function (e) {
-        name = $('#name').val();
-        $('#name').val('');
-    });
 }
 
 function playNote(step, length, type, position) {
