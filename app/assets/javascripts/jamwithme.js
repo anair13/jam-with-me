@@ -30,6 +30,12 @@ Controller.chooseName = function() {
     dataUserRef.push({user: Controller.username});
 }
 
+Controller.chooseNameEnter = function(event) {
+    if((window.event ? event.keyCode : e.which) == 13) {
+        Controller.chooseName();
+    }
+}
+
 Controller.scrollLeft = function() {
     if(Controller.measureOffset > 0) {
         Controller.measureOffset--;
