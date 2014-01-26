@@ -123,6 +123,10 @@ function init() {
 
         Controller.handleNewNote(message.position, message.length, message.step, message.type);
     });
+    myDataRef.on('child_removed', function (snapshot) {
+        var message = snapshot.val();
+        Controller.getTrack(message.type).removeNoteAtPos(message.position, message.step / 2, true);
+    }
 
     var chatDataRef = new Firebase(firebase_chat_identifier);
     $('#message').keypress(function (e) {
