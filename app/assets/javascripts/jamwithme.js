@@ -138,6 +138,7 @@ Track.prototype.removeNoteAtPos = function(pos, pitch, local_only) {
         var note = this.notes[i];
         if(note.pos == pos && note.pitch == pitch) {
             this.notes.splice(i, 1);
+            break;
         }
     }
     if(!local_only) {
