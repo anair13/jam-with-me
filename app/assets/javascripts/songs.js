@@ -4,6 +4,8 @@
 
 var context = new AudioContext();
 var firebase_song_identifier = "https://jamwithme.firebaseio.com/music/<%= @song.firebase_identifier %>";
+var firebase_chat_identifier = "https://jamwithme.firebaseio.com/chat/<%= @song.firebase_identifier %>";
+var firebase_userlist_identifier = "https://jamwithme.firebaseio.com/users/<%= @song.firebase_identifier %>";
 window.onload = init;
 var bufferLoader;
 
@@ -163,6 +165,24 @@ function playback() {
     playNote(message.step, message.length, message.type, message.position);
   });
 }
+
+var chatDataRef = new Firebase(firebase_chat_identifier);
+$('#message').keypress(function (e) {
+    if (e.keyCode == 13) {
+      var name = username;
+      var text = $('#message').val();
+      chatDataRef.push({name: name, text: text});
+      $('#message').val('');
+       
+    }
+});
+chatDataRef.on('child_added', function(snapshot) {
+  var message = snapshot.val();
+  displayChatMessage(message.name, message.text);
+});
+function displayChatMessage(name, text) {
+  $('<div/>').text(text).prepend($('<em/>').text(name+': ')).appendTo($('#messagesDiv'));
+  $('#messagesDiv')[0].scrollTop = $('#messagesDiv')[0].scrollHeight;
 
 // function stopRecording() {
 //     rec.stop();
