@@ -2,12 +2,6 @@
 // All this logic will automatically be available in application.js.
 // You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 var context = new AudioContext();
-<<<<<<< HEAD
-var firebase_song_identifier = "https://jamwithme.firebaseio.com/music/<%= @song.firebase_identifier %>";
-var firebase_chat_identifier = "https://jamwithme.firebaseio.com/chat/<%= @song.firebase_identifier %>";
-var firebase_userlist_identifier = "https://jamwithme.firebaseio.com/users/<%= @song.firebase_identifier %>";
-=======
->>>>>>> f36d645193e4065df7af36f8f9e4c028cc6d800c
 window.onload = init;
 var bufferLoader;
 
@@ -169,6 +163,7 @@ function playback() {
 }
 
 var chatDataRef = new Firebase(firebase_chat_identifier);
+var name;
 $('#message').keypress(function (e) {
     if (e.keyCode == 13) {
       var name = username;
@@ -185,7 +180,10 @@ chatDataRef.on('child_added', function(snapshot) {
 function displayChatMessage(name, text) {
   $('<div/>').text(text).prepend($('<em/>').text(name+': ')).appendTo($('#messagesDiv'));
   $('#messagesDiv')[0].scrollTop = $('#messagesDiv')[0].scrollHeight;
-
+$('#name').keypress(function (e)) {
+    name = $('#name').val();
+    $('#name').val('');
+}
 // function stopRecording() {
 //     rec.stop();
 //     createDownloadLink();
