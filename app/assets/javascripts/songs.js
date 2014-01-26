@@ -142,7 +142,7 @@ function playNote(step, length, type, position) {
     var timeOff = timeOn + length * atomNoteTime;
     var source = getTone(step, bufferIndex);
     source.start(timeOn);
-    source.noteOff(timeOff);
+    source.stop(timeOff);
 }
 
 // Generates a source from a buffer and shifts it to the right tone
