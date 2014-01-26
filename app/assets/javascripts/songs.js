@@ -118,9 +118,7 @@ function init() {
     myDataRef = new Firebase(firebase_song_identifier);
     myDataRef.on('child_added', function (snapshot) {
         var message = snapshot.val();
-
-        playNote(message.step, message.length, message.type, 0);
-
+        playNote(message.step, message.length, message.type, 0.1);
         Controller.handleNewNote(message.position, message.length, message.step, message.type);
     });
 
@@ -150,17 +148,20 @@ function init() {
 
 function playNote(step, length, type, position) {
     // convert type of instrument to corresponding bufferIndex
-    bufferIndex = 0;
+    bufferIndex = -1;
     switch (type) {
     case "piano":
-        bufferIndex = 1;
-    case "violin":
-        bufferIndex = 2;
-    default:
         bufferIndex = 0;
+        break;
+    case "violin":
+        bufferIndex = 1;
+        break;
+    default:
+        bufferIndex = -1;
     }
+    console.log(step, length, type, position);
     var timeOn = playbackStartTime + position * atomNoteTime;
-    var timeOff = timeOn + length * atomNoteTime;
+    var timeOff = timeOn + (32 / length) * atomNoteTime;
     var source = getTone(step, bufferIndex);
     source.start(timeOn);
     source.stop(timeOff);
