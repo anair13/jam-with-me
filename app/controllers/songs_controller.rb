@@ -24,11 +24,16 @@ class SongsController < ApplicationController
   # GET /songs/new
   # GET /songs/new.json
   def new
-    @song = Song.new
+    @song = Song.new(params[:song])
 
     respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @song }
+      if @song.save
+        format.html { redirect_to @song, notice: 'Song was successfully created.' }
+        format.json { render json: @song, status: :created, location: @song }
+      else
+        format.html { render action: "new" }
+        format.json { render json: @song.errors, status: :unprocessable_entity }
+      end
     end
   end
 
