@@ -116,6 +116,7 @@ function init() {
     myDataRef = new Firebase(firebase_song_identifier);
     myDataRef.on('child_added', function (snapshot) {
         var message = snapshot.val();
+        console.log(message);
         playNote(message.step, message.length, message.type, 0);
         Controller.handleNewNote(message.position, message.length, message.step, message.type);
     });
