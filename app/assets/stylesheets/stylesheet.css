@@ -73,3 +73,9 @@
     position: absolute;
     display: block;
 }
+
+.user-overlay {
+    position: absolute;
+    display: block;
+    z-index: 100; 
+}

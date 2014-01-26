@@ -22,6 +22,11 @@ Controller.Init = function() {
     Controller.Update();
 }
 
+Controller.chooseName = function() {
+    $(".user-overlay").hide();
+    alert("Username: " + $("#name-box").val());
+}
+
 Controller.Update = function() {
     /* Update variables */
     
