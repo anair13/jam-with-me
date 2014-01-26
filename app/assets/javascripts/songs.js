@@ -127,7 +127,7 @@ function init() {
     var chatDataRef = new Firebase(firebase_chat_identifier);
     $('#message').keypress(function (e) {
         if (e.keyCode == 13) {
-          var name = username;
+          var name = Controller.username;
           var text = $('#message').val();
           chatDataRef.push({name: name, text: text});
           $('#message').val('');
@@ -143,7 +143,7 @@ function init() {
     var name;
     $('#message').keypress(function (e) {
         if (e.keyCode == 13) {
-          var name = username;
+          var name = Controller.username;
           var text = $('#message').val();
           chatDataRef.push({name: name, text: text});
           $('#message').val('');
