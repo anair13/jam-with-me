@@ -19,23 +19,7 @@ var atomNoteTime = (60 / tempo) / 8; // 32nd note
 var MINUTES = 20;
 var d = new Date();
 var startTime = d.getTime();
-var thissession = new Firebase('https://jamwithme.firebaseio.com/music/thissession');
-thissession.on('value', function(snapshot) {
-  var session = snapshot.val();
-  var ID = session.ID;
-  endTime = session.endTime;
-
-  setInterval(function() {
-    var thisDate = new Date();
-    $('#box_header').text(get_elapsed_time_string(Math.floor((endTime - thisDate.getTime())/1000)));
-  }, 1000);
-  var temp = d.getTime()
-  setTimeout(function() {
-    killSession();
-  }, endTime - startTime);
-});
-
-var myDataRef = new Firebase(firebase_song_identifier);
+var myDataRef;
 
 function editNote(step, length, type, position) {
   var n = d.getTime();
@@ -57,11 +41,6 @@ function editNote(step, length, type, position) {
     $('#position').val('');
   }
 }
-
-myDataRef.on('child_added', function(snapshot) {
-  var message = snapshot.val();
-  playNote(message.step, message.length, message.type, message.position);
-});
 
 function displayChatMessage(step, length) {
   $('<div/>').text(step).prepend($('<em/>').text(length+': ')).appendTo($('#messagesDiv'));
@@ -116,6 +95,28 @@ function init() {
     );
 
   bufferLoader.load();
+
+  var thissession = new Firebase('https://jamwithme.firebaseio.com/music/thissession');
+    thissession.on('value', function(snapshot) {
+      var session = snapshot.val();
+      var ID = session.ID;
+      endTime = session.endTime;
+
+      setInterval(function() {
+        var thisDate = new Date();
+        $('#box_header').text(get_elapsed_time_string(Math.floor((endTime - thisDate.getTime())/1000)));
+      }, 1000);
+      var temp = d.getTime()
+      setTimeout(function() {
+        killSession();
+      }, endTime - startTime);
+    });
+
+    myDataRef = new Firebase(firebase_song_identifier);
+myDataRef.on('child_added', function(snapshot) {
+  var message = snapshot.val();
+  playNote(message.step, message.length, message.type, message.position);
+});
 }
 
 function finishedLoading(bufferList) {
