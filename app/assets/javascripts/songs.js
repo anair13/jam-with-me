@@ -93,6 +93,8 @@ function init() {
         context, [
             "../assets/pianoc4.wav",
             "../assets/violinc5.wav",
+            "../assets/drum.wav",
+            "../assets/synth.mp3"
             //    "http://localhost:3000/assets/guitarc4.wav"
         ],
         finishedLoading
@@ -112,7 +114,7 @@ function init() {
 
         setInterval(function () {
             var thisDate = new Date();
-            $('#box_header').text(get_elapsed_time_string(Math.floor((endTime - thisDate.getTime()) / 1000)));
+            $('#timer').text(get_elapsed_time_string(Math.floor((endTime - thisDate.getTime()) / 1000)));
         }, 1000);
     });
 
@@ -161,6 +163,12 @@ function playNote(step, length, type, position) {
         break;
     case "violin":
         bufferIndex = 1;
+        break;
+    case "drums":
+        bufferIndex = 2;
+        break;
+    case "synth":
+        bufferIndex = 3;
         break;
     default:
         bufferIndex = -1;
