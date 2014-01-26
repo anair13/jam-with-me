@@ -34,10 +34,9 @@ html, body {
 }
 
 #nav-container {
-    position: relative;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+    position: absolute;
+    display: inline-block;
+    margin: 40px;
     left: 0%;
     top: 65%;
     height: 5%;
