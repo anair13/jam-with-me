@@ -196,7 +196,7 @@ Track.prototype.Draw = function() {
     c.drawImage(l(this.instrumentImage), 0, 5 + tri * Track.trackSpacing);
 
     // Draw clefs
-    c.drawImage(l(this.clefImage), Track.leftOffset - 20, 5 + tri * Track.trackSpacing);
+    c.drawImage(l(this.clefImage), Track.leftOffset - 20, 5 + tri * Track.trackSpacing - 12);
 
     // Draw notes
     for(var i = 0; i < this.notes.length; i++) {
