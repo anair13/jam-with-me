@@ -114,7 +114,6 @@ function init() {
         noteRefs.unshift(snapshot.ref());
         var message = snapshot.val();
         notemap.unshift([message.step, message.type, message.position].toString());
-        playNote(message.step, message.length, message.type, 0.1);
         Controller.handleNewNote(message.position, message.length, message.step, message.type);
     });
     myDataRef.on('child_removed', function (snapshot) {
@@ -171,6 +170,31 @@ function playNote(step, length, type, position) {
     var timeOff = timeOn + (32 / length) * atomNoteTime;
     var source = getTone(step, bufferIndex);
     source.start(timeOn);
+    source.stop(timeOff);
+}
+
+function playNoteNow(step, length, type, position) {
+    // convert type of instrument to corresponding bufferIndex
+    bufferIndex = -1;
+    switch (type) {
+    case "piano":
+        bufferIndex = 0;
+        break;
+    case "violin":
+        bufferIndex = 1;
+        break;
+    case "drums":
+        bufferIndex = 2;
+        break;
+    case "synth":
+        bufferIndex = 3;
+        break;
+    default:
+        bufferIndex = -1;
+    }
+    var timeOff = context.currentTime + (32 / length) * atomNoteTime;
+    var source = getTone(step, bufferIndex);
+    source.start(0);
     source.stop(timeOff);
 }
 

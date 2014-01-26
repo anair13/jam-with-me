@@ -82,5 +82,11 @@
 .user-overlay {
     position: absolute;
     display: block;
-    z-index: 100; 
+    z-index: 100;
+}
+
+#timer {
+    font-size: 1em;
+    font-weight: bold;
+    margin-top: 2px;
 }
