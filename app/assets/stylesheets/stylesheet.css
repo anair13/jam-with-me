@@ -50,8 +50,8 @@
 }
 
 .chat-type-container {
-    position: absolute;
-    display: block;
+    position: relative;
+    display: inline-block;
     left: 0%;
     top: 80%;
     width: 100%;
