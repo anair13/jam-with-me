@@ -233,7 +233,7 @@ function ViolinTrack() {
     var tr = new Track();
     tr.instrument = "violin";
     tr.instrumentImage = "instrument_violin";
-    tr.clefImage = "clef_bass";
+    tr.clefImage = "clef_treble";
     return tr;
 }
 function SynthTrack() {
