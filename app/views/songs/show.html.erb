@@ -4,6 +4,7 @@
 var firebase_song_identifier = "https://jamwithme.firebaseio.com/music/<%= @song.firebase_identifier %>";
 var firebase_chat_identifier = "https://jamwithme.firebaseio.com/chat/<%= @song.firebase_identifier %>";
 var firebase_userlist_identifier = "https://jamwithme.firebaseio.com/users/<%= @song.firebase_identifier %>";
+var endTime = <%= @song.firebase_identifier.slice(7..-1) %> + 1 * 60 * 1000;
 </script>
 
 <div class="container">
