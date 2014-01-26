@@ -44,6 +44,7 @@ Controller.Update = function() {
 }
 
 Controller.handleNewNote = function(pos, length, pitch, instrument) {
+    console.log("handling note added");
     if(length == 0) {
         Controller.getTrack(instrument).removeNoteAtPos(pos, pitch, true);
     } else {
