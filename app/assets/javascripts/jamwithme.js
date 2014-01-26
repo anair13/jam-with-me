@@ -10,6 +10,7 @@ Controller.Init = function() {
     Controller.tracks = [new PianoTrack(), new DrumTrack(), new ViolinTrack(), new SynthTrack()];
     Controller.timeLeft = 0;
     Controller.current_canvas = 0;
+    Controller.username = "guest";
 
     var cv = l("drawCanvas");
     cv.width = cv.parentNode.offsetWidth;
@@ -24,7 +25,7 @@ Controller.Init = function() {
 
 Controller.chooseName = function() {
     $(".user-overlay").hide();
-    alert("Username: " + $("#name-box").val());
+    Controller.username = $("#name-box").val();
 }
 
 Controller.Update = function() {
