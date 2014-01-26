@@ -83,7 +83,7 @@ function init() {
             "../assets/pianoc4.wav",
             "../assets/violinc5.wav",
             "../assets/drum.wav",
-            "../assets/synth.mp3"
+            "../assets/synth.wav"
             //    "http://localhost:3000/assets/guitarc4.wav"
         ],
         finishedLoading
