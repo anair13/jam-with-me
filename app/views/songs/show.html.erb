@@ -11,7 +11,8 @@ var firebase_userlist_identifier = "https://jamwithme.firebaseio.com/users/<%= @
   </div>
   <div class="user-overlay" style="background-color: #FFF; left: 10%; top: 20%; width: 80%; height: 60%">
     <p style="text-align: center">Please enter your name:</p><br>
-    <input type="text" size="80">
+    <input id="name-box" type="text" size="80">
+    <input type="button" value="Done" onclick="Controller.chooseName();">
   </div>
   <div class="main-container no-margins">
     <div id="track-container">
@@ -54,16 +55,16 @@ var firebase_userlist_identifier = "https://jamwithme.firebaseio.com/users/<%= @
   </div>
 </div>
 <!-- Inconsequential image dump referenced by JS -->
-<img class="invisible" id="note_whole" src="../assets/notes/whole.png" />
-<img class="invisible" id="note_half" src="../assets/notes/half.png" />
-<img class="invisible" id="note_quarter" src="../assets/notes/quarter.png" />
-<img class="invisible" id="note_eighth" src="../assets/notes/eighth.png" />
-<img class="invisible" id="note_sixteenth" src="../assets/notes/sixteenth.png" />
-<img class="invisible" id="note_thirtysecond" src="../assets/notes/thirtysecond.png" />
-<img class="invisible" id="instrument_piano" src="../assets/instruments/instrument_piano.png" />
-<img class="invisible" id="instrument_drums" src="../assets/instruments/instrument_drums.png" />
-<img class="invisible" id="instrument_violin" src="../assets/instruments/instrument_violin.png" />
-<img class="invisible" id="instrument_synth" src="../assets/instruments/instrument_synth.png" />
-<img class="invisible" id="clef_treble" src="../assets/clefs/treble_clef.gif" />
-<img class="invisible" id="clef_bass" src="../assets/clefs/bass_clef.png" />
-<img id="ghost_note" class="invisible no-margins" src="../assets/notes/piano_note_1.gif" />
+<img class="invisible" id="note_whole" src="../assets/images/notes/whole.png" />
+<img class="invisible" id="note_half" src="../assets/images/notes/half.png" />
+<img class="invisible" id="note_quarter" src="../assets/images/notes/quarter.png" />
+<img class="invisible" id="note_eighth" src="../assets/images/notes/eighth.png" />
+<img class="invisible" id="note_sixteenth" src="../assets/images/notes/sixteenth.png" />
+<img class="invisible" id="note_thirtysecond" src="../assets/images/notes/thirtysecond.png" />
+<img class="invisible" id="instrument_piano" src="../assets/images/instruments/instrument_piano.png" />
+<img class="invisible" id="instrument_drums" src="../assets/images/instruments/instrument_drums.png" />
+<img class="invisible" id="instrument_violin" src="../assets/images/instruments/instrument_violin.png" />
+<img class="invisible" id="instrument_synth" src="../assets/images/instruments/instrument_synth.png" />
+<img class="invisible" id="clef_treble" src="../assets/images/clefs/treble_clef.gif" />
+<img class="invisible" id="clef_bass" src="../assets/images/clefs/bass_clef.png" />
+<img id="ghost_note" class="invisible no-margins" src="../assets/images/notes/quarter.png" />
