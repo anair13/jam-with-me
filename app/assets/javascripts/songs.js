@@ -96,6 +96,10 @@ function init() {
 
   bufferLoader.load();
 
+  function finishedLoading(bufferList) {
+      buffers = bufferList;
+    }
+
   var thissession = new Firebase('https://jamwithme.firebaseio.com/music/thissession');
     thissession.on('value', function(snapshot) {
       var session = snapshot.val();
@@ -117,10 +121,6 @@ myDataRef.on('child_added', function(snapshot) {
   var message = snapshot.val();
   playNote(message.step, message.length, message.type, message.position);
 });
-}
-
-function finishedLoading(bufferList) {
-  buffers = bufferList;
 }
 
 function playNote(step, length, type, position) {
@@ -156,7 +156,6 @@ function getTone(semitones, bufferIndex) {
 // var rec = new Recorder(context.destination, {workerPath: "/assets/recorderWorker.js"});
 
 function playback() {
-  rec.record();
   playbackStartTime = context.currentTime + 0.100;
   var myDataRef = new Firebase(firebase_song_identifier);
   myDataRef.on('child_added', function(snapshot) {
