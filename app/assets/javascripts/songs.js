@@ -176,6 +176,11 @@ function playNote(step, length, type, position) {
 
 // Generates a source from a buffer and shifts it to the right tone
 function getTone(semitones, bufferIndex) {
+    // Convert semitones into actual semitones
+    new_semitones = Math.floor(semitones / 7) * 12 + (semitones % 7) * 2;
+    if(semitones % 7 >= 3) new_semitones--;
+    semitones = new_semitones;
+
     var source = context.createBufferSource();
     source.buffer = buffers[bufferIndex];
     source.connect(context.destination);
