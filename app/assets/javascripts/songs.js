@@ -182,8 +182,9 @@ function playback() {
 }
 
 function displayChatMessage(name, text) {
-  $('<div/>').text(text).prepend($('<em/>').text(name+': ')).appendTo($('#messagesDiv'));
-  $('#messagesDiv')[0].scrollTop = $('#messagesDiv')[0].scrollHeight;
+  var oldtext = $("#chat-messages").value();
+  oldtext += name + ": " + text + "\n";
+  $("#chat-messages").value(oldtext);
 }
 
 function newSong() {
