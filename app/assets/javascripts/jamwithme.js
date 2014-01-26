@@ -171,7 +171,7 @@ Track.prototype.Draw = function() {
     for(var i = 0; i < 5; i++) {
         var y = i * Track.lineSpacing + 5 + tri * Track.trackSpacing;
         c.beginPath();
-        c.moveTo(Track.leftOffset - 33, y);
+        c.moveTo(Track.leftOffset - 28, y);
         c.lineTo(Track.leftOffset + cv.width, y);
         c.strokeStyle = "#000";
         c.lineWidth = 2;
