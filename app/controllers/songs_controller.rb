@@ -27,11 +27,11 @@ class SongsController < ApplicationController
     @song = Song.new(params[:song])
 
     respond_to do |format|
-      if @song.save
+      if !Song.last(1).last.frozen && @song.save
         format.html { redirect_to @song, notice: 'Song was successfully created.' }
         format.json { render json: @song, status: :created, location: @song }
       else
-        format.html { render action: "new" }
+        format.html { redirect_to Song.last(1).last }
         format.json { render json: @song.errors, status: :unprocessable_entity }
       end
     end
