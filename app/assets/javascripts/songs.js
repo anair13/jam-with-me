@@ -116,7 +116,12 @@ function init() {
     myDataRef = new Firebase(firebase_song_identifier);
     myDataRef.on('child_added', function (snapshot) {
         var message = snapshot.val();
+
+        console.log("HERB");
         playNote(message.step, message.length, message.type, 0);
+
+        console.log("LOLL");
+        console.log(message);
         Controller.handleNewNote(message.position, message.length, message.step, message.type);
     });
 }
@@ -137,7 +142,7 @@ function playNote(step, length, type, position) {
     var timeOff = timeOn + length * atomNoteTime;
     var source = getTone(step, bufferIndex);
     source.start(timeOn);
-    source.noteOff(timeOff);
+    source.stop(timeOff);
 }
 
 // Generates a source from a buffer and shifts it to the right tone
