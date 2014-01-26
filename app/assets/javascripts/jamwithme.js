@@ -11,6 +11,7 @@ Controller.Init = function() {
     Controller.timeLeft = 0;
     Controller.current_canvas = 0;
     Controller.username = "guest";
+    Controller.measureOffset = 0;
 
     var cv = l("drawCanvas");
     cv.width = cv.parentNode.offsetWidth;
@@ -27,6 +28,24 @@ Controller.chooseName = function() {
     $(".user-overlay").hide();
     Controller.username = $("#name-box").val();
     dataUserRef.push({user: Controller.username});
+}
+
+Controller.chooseNameEnter = function(e) {
+    if((window.event ? event.keyCode : e.which) == 13) {
+        Controller.chooseName();
+    }
+}
+
+Controller.scrollLeft = function() {
+    if(Controller.measureOffset > 0) {
+        Controller.measureOffset--;
+    }
+    $("#measure-text").html("Measure " + Controller.measureOffset);
+}
+
+Controller.scrollRight = function() {
+    Controller.measureOffset++;
+    $("#measure-text").html("Measure " + Controller.measureOffset);
 }
 
 Controller.Update = function() {
@@ -205,13 +224,15 @@ Track.prototype.Draw = function() {
         var length = note.length;
         var pitch = note.pitch;
         var img = this.noteImages[length];
-        var x = Track.leftOffset + Track.measureSpacing * pos / 32;
+        var x = Track.leftOffset + Track.measureSpacing * ((pos / 32) - Controller.measureOffset);
         var y = 5 + tri * Track.trackSpacing + Track.lineSpacing * (3 - pitch);
 
-        var XOFF = -4;
-        var YOFF = -29; 
+        if(Track.leftOffset - 28 <= x && x <= Track.leftOffset + cv.width) {
+            var XOFF = -4;
+            var YOFF = -29; 
 
-        c.drawImage(l(img), x + XOFF, y + YOFF);
+            c.drawImage(l(img), x + XOFF, y + YOFF);
+        }
     }
 }
 
@@ -233,7 +254,7 @@ function ViolinTrack() {
     var tr = new Track();
     tr.instrument = "violin";
     tr.instrumentImage = "instrument_violin";
-    tr.clefImage = "clef_bass";
+    tr.clefImage = "clef_treble";
     return tr;
 }
 function SynthTrack() {
@@ -255,10 +276,10 @@ window.onmousemove = function(e) {
         var maxy = 5 + tri * Track.trackSpacing + Track.lineSpacing * 6.5;
         if(minx <= mx && mx <= maxx && miny <= my && my <= maxy) {
             // Get pos, pitch
-            var pos = Math.round((mx - Track.leftOffset) * Track.getSnap() / Track.measureSpacing) * 32 / Track.getSnap();
+            var pos = Math.round((mx - Track.leftOffset) * Track.getSnap() / Track.measureSpacing) * 32 / Track.getSnap() + Controller.measureOffset * 32;
             var pitch = Math.floor((((5 + tri * Track.trackSpacing + 6.5 * Track.lineSpacing) - my) / Track.lineSpacing) * 2) / 2;
 
-            var x = -4 + Track.leftOffset + parseInt($("#track-container").css("margin-left"), 10) + Track.measureSpacing * pos / 32;
+            var x = -4 + Track.leftOffset + parseInt($("#track-container").css("margin-left"), 10) + Track.measureSpacing * (pos / 32 - Controller.measureOffset);
             var y = -29 + 5 + tri * Track.trackSpacing + Track.lineSpacing * (10 - pitch);
             l("ghost_note").style.left = x + "px";
             l("ghost_note").style.top = y + "px";
@@ -299,7 +320,7 @@ window.onclick = function(e) {
         var miny = 5 + tri * Track.trackSpacing - Track.lineSpacing * 1.5;
         var maxy = 5 + tri * Track.trackSpacing + Track.lineSpacing * 6.5;
         if(minx <= mx && mx <= maxx && miny <= my && my <= maxy) {
-            var pos = Math.round((mx - Track.leftOffset) * Track.getSnap() / Track.measureSpacing) * 32 / Track.getSnap();
+            var pos = Math.round((mx - Track.leftOffset) * Track.getSnap() / Track.measureSpacing) * 32 / Track.getSnap() + Controller.measureOffset * 32;
             var length = Track.getLength();
             var pitch = Math.floor((((5 + tri * Track.trackSpacing + 3.5 * Track.lineSpacing) - my) / Track.lineSpacing) * 2) / 2;
 
