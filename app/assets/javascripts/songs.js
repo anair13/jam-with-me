@@ -43,7 +43,7 @@ function editNote(step, length, type, position) {
 
 function displayChatMessage(step, length) {
     var oldtext = $("#chat-messages").val();
-    oldtext += Controller.username + ": " + text + "\n";
+    oldtext += Controller.username + ": " + text;
     $("#chat-messages").val(oldtext);
     $('#chat-messages').scrollTop = $('#chat-messages').scrollHeight;
 };
