@@ -22,7 +22,7 @@ var myDataRef;
 function editNote(step, length, type, position) {
     var n = d.getTime();
 
-    if (length == '0') {
+    if (length == 0) {
         noteRefs[notemap.indexOf([step, type, position].toString())].remove();
         console.log(notemap);
         console.log(noteRefs);
