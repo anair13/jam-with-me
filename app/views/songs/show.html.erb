@@ -45,6 +45,8 @@ var endTime = <%= @song.firebase_identifier.slice(7..-1) %> + 1 * 60 * 1000;
         <input type="button" value="<" onclick="Controller.scrollLeft();">
         <span id="measure-text">Measure 0</span>
         <input type="button" value=">" onclick="Controller.scrollRight();">
+        <span id="timer"></span>
+        <span id="error"></span>
       </div>
     </div>
   </div>
