@@ -36,8 +36,11 @@ html, body {
 #nav-container {
     position: absolute;
     display: block;
+    margin-left: auto;
+    margin-right: auto;
     left: 0%;
     top: 65%;
+    width: 60%;
     height: 5%;
     background-color: #F00;
 }
