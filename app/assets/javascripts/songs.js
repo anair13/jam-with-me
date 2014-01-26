@@ -129,6 +129,9 @@ function init() {
     var chatDataRef = new Firebase(firebase_chat_identifier);
     $('#message').keypress(function (e) {
         if (e.keyCode == 13) {
+            if(Controller.username == ''){
+                Controller.username = 'guest' + Math.floor(Math.random() * 1000).toString();
+            }
           var name = Controller.username;
           var text = $('#message').val();
           chatDataRef.push({name: name, text: text});
