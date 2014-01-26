@@ -118,16 +118,16 @@ function init() {
 
     myDataRef = new Firebase(firebase_song_identifier);
     myDataRef.on('child_added', function (snapshot) {
-        //noteRefs.unshift(snapshot.ref());
+        noteRefs.unshift(snapshot.ref());
         var message = snapshot.val();
-        //notemap.unshift([message.step, message.type, message.position].toString());
+        notemap.unshift([message.step, message.type, message.position].toString());
         playNote(message.step, message.length, message.type, 0.1);
         Controller.handleNewNote(message.position, message.length, message.step, message.type);
     });
-    //myDataRef.on('child_removed', function (snapshot) {
-    //    var message = snapshot.val();
-    //    Controller.getTrack(message.type).removeNoteAtPos(message.position, message.step / 2, true);
-    //});
+    myDataRef.on('child_removed', function (snapshot) {
+        var message = snapshot.val();
+        Controller.getTrack(message.type).removeNoteAtPos(message.position, message.step / 2, true);
+    });
 
     var chatDataRef = new Firebase(firebase_chat_identifier);
     $('#message').keypress(function (e) {

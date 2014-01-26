@@ -171,7 +171,7 @@ Track.prototype.Draw = function() {
     for(var i = 0; i < 5; i++) {
         var y = i * Track.lineSpacing + 5 + tri * Track.trackSpacing;
         c.beginPath();
-        c.moveTo(Track.leftOffset, y);
+        c.moveTo(Track.leftOffset - 28, y);
         c.lineTo(Track.leftOffset + cv.width, y);
         c.strokeStyle = "#000";
         c.lineWidth = 2;
@@ -180,7 +180,7 @@ Track.prototype.Draw = function() {
     }
 
     // Vertical measure lines
-    for(var i = 0; i < 5; i++) {
+    for(var i = 1; i < 5; i++) {
         var x = Track.leftOffset + i * Track.measureSpacing;
         var y = 5 + tri * Track.trackSpacing;
         c.beginPath();
@@ -196,7 +196,7 @@ Track.prototype.Draw = function() {
     c.drawImage(l(this.instrumentImage), 0, 5 + tri * Track.trackSpacing);
 
     // Draw clefs
-    c.drawImage(l(this.clefImage), Track.leftOffset - 20, 5 + tri * Track.trackSpacing);
+    c.drawImage(l(this.clefImage), Track.leftOffset - 20, 5 + tri * Track.trackSpacing - 12);
 
     // Draw notes
     for(var i = 0; i < this.notes.length; i++) {
