@@ -33,16 +33,6 @@ html, body {
     height: 65%;
 }
 
-#nav-container {
-    position: absolute;
-    display: inline-block;
-    margin: 40px;
-    left: 0%;
-    top: 65%;
-    height: 5%;
-    background-color: #F00;
-}
-
 .settings-container {
     position: absolute;
     display: inline-block;

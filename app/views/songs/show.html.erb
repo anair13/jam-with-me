@@ -20,11 +20,6 @@ var endTime = <%= @song.firebase_identifier.slice(7..-1) %> + 1 * 60 * 1000;
       <canvas class="drawing-canvas" id="drawCanvas"></canvas>
       <canvas class="drawing-canvas" id="drawCanvas2"></canvas>
     </div>
-    <div id="nav-container">
-      <input type="button" value="<" onclick="Controller.scrollLeft();">
-        <div id="measure-text">Measure 0</div>
-      <input type="button" value=">" onclick="Controller.scrollRight();">
-    </div>
     <div class="settings-container">
       <div style="float: left; width: 40%">
         <b>Snap To:</b><br>
@@ -46,7 +41,10 @@ var endTime = <%= @song.firebase_identifier.slice(7..-1) %> + 1 * 60 * 1000;
         <b>Action:</b><br>
         <input type="radio" name="settings_action" value="add" checked="checked">Add Note<br>
         <input type="radio" name="settings_action" value="remove">Remove Note<br>
-        <input type="button" onclick="playback();" value="Play Song">
+        <input type="button" onclick="playback();" value="Play Song"><br>
+        <input type="button" value="<" onclick="Controller.scrollLeft();">
+        <span id="measure-text">Measure 0</span>
+        <input type="button" value=">" onclick="Controller.scrollRight();">
       </div>
     </div>
   </div>
