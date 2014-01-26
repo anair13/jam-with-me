@@ -30,7 +30,7 @@ Controller.chooseName = function() {
     dataUserRef.push({user: Controller.username});
 }
 
-Controller.chooseNameEnter = function(event) {
+Controller.chooseNameEnter = function(e) {
     if((window.event ? event.keyCode : e.which) == 13) {
         Controller.chooseName();
     }
