@@ -68,7 +68,7 @@ function get_elapsed_time_string(total_seconds) {
         return currentTimeString;
     }
     else {
-        return "Next song in " + (20 + total_seconds);
+        return "Next song in " + (21 + total_seconds);
     }
 }
 
