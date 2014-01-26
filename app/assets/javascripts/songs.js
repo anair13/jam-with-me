@@ -18,11 +18,12 @@ var MINUTES = 20;
 var d = new Date();
 var startTime = d.getTime();
 var myDataRef;
+var dataUserRef;
 
 function editNote(step, length, type, position) {
     var n = d.getTime();
 
-    if (length == '0') {
+    if (length == 0) {
         noteRefs[notemap.indexOf([step, type, position].toString())].remove();
         console.log(notemap);
         console.log(noteRefs);
@@ -117,11 +118,16 @@ function init() {
 
     myDataRef = new Firebase(firebase_song_identifier);
     myDataRef.on('child_added', function (snapshot) {
+        //noteRefs.unshift(snapshot.ref());
         var message = snapshot.val();
-        notemap.unshift([message.step, message.type, message.position].toString());
+        //notemap.unshift([message.step, message.type, message.position].toString());
         playNote(message.step, message.length, message.type, 0.1);
         Controller.handleNewNote(message.position, message.length, message.step, message.type);
     });
+    //myDataRef.on('child_removed', function (snapshot) {
+    //    var message = snapshot.val();
+    //    Controller.getTrack(message.type).removeNoteAtPos(message.position, message.step / 2, true);
+    //});
 
     var chatDataRef = new Firebase(firebase_chat_identifier);
     $('#message').keypress(function (e) {
@@ -138,12 +144,11 @@ function init() {
       var message = snapshot.val();
       displayChatMessage(message.name, message.text);
     });
-    var dataUserRef = new Firebase(firebase_userlist_identifier);
-    dataUserRef.push({user: Controller.username});
+    dataUserRef = new Firebase(firebase_userlist_identifier);
     dataUserRef.on('child_added', function(snapshot) {
         var user = snapshot.val();
         displayUser(user.user);
-    })
+    });
 
 }
 
@@ -197,7 +202,7 @@ function displayChatMessage(name, text) {
 }
 function displayUser(user) {
     var users = $("#chat-users").val();
-    users += user : "\n";
+    users += user + "\n";
     $("#chat-users").val(users);
     l('chat-users').scrollTop = l('chat-users').scrollHeight;
 }

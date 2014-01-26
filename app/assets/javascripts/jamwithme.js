@@ -26,6 +26,7 @@ Controller.Init = function() {
 Controller.chooseName = function() {
     $(".user-overlay").hide();
     Controller.username = $("#name-box").val();
+    dataUserRef.push({user: Controller.username});
 }
 
 Controller.Update = function() {
@@ -95,12 +96,6 @@ function Track() {
         8: "note_eighth", // 8th note
         16: "note_sixteenth", // 16th note
         32: "note_thirtysecond"  // 32nd note
-    };
-    Track.INSTRUMENTS = {
-        PIANO: 0,
-        SYNTH: 1,
-        VIOLIN: 2,
-        DRUMS: 3
     };
     this.instrument = -1;
     this.instrumentImage = "";
