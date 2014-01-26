@@ -248,7 +248,7 @@ window.onmousemove = function(e) {
     for(var tri = 0; tri < Controller.tracks.length; tri++) {
         var tr = Controller.tracks[tri];
         var minx = Track.leftOffset + parseInt($("#track-container").css("margin-left"), 10);
-        var maxx = minx + parseInt($("#track-container").css("width"), 10);
+        var maxx = parseInt($("#track-container").css("width"), 10);
         var miny = 5 + tri * Track.trackSpacing - Track.lineSpacing * 1.5;
         var maxy = 5 + tri * Track.trackSpacing + Track.lineSpacing * 6.5;
         if(minx <= mx && mx <= maxx && miny <= my && my <= maxy) {
