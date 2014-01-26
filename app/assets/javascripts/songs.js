@@ -21,9 +21,6 @@ var myDataRef;
 
 function editNote(step, length, type, position) {
     var n = d.getTime();
-    if (n > endTime) {
-        killSession();
-    }
 
     if (length == '0') {
         noteRefs[notemap.indexOf([step, type, position].toString())].remove();
@@ -114,16 +111,12 @@ function init() {
             var thisDate = new Date();
             $('#box_header').text(get_elapsed_time_string(Math.floor((endTime - thisDate.getTime()) / 1000)));
         }, 1000);
-        var temp = d.getTime()
-        setTimeout(function () {
-            killSession();
-        }, endTime - startTime);
     });
 
     myDataRef = new Firebase(firebase_song_identifier);
     myDataRef.on('child_added', function (snapshot) {
         var message = snapshot.val();
-        playNote(message.step, message.length, message.type, message.position);
+        playNote(message.step, message.length, message.type, 0);
         Controller.handleNewNote(message.position, message.length, message.step, message.type);
     });
 }
