@@ -24,6 +24,7 @@ Controller.Init = function() {
 
 Controller.Update = function() {
     /* Update variables */
+    
 
     /* Drawing */
     
@@ -40,6 +41,23 @@ Controller.Update = function() {
     }
     Controller.flipCanvas();
     setTimeout(Controller.Update, 1000/Controller.FPS);
+}
+
+Controller.handleNewNote = function(pos, length, pitch, instrument) {
+    if(length == 0) {
+        Controller.getTrack(instrument).removeNoteAtPos(pos, pitch, true);
+    } else {
+        Controller.getTrack(instrument).addNote(new Note(pos, length, pitch), true);
+    }
+}
+
+Controller.getTrack = function(instrument) {
+    for(var i = 0; i < Controller.tracks.length; i++) {
+        var track = Controller.tracks[i];
+        if(track.instrument == instrument) {
+            return track;
+        }
+    }
 }
 
 Controller.getCanvas = function() {
@@ -93,7 +111,8 @@ Track.prototype.Init = function() {
     this.notes = [];
 }
 
-Track.prototype.addNote = function(note) {
+Track.prototype.addNote = function(note, local_only) {
+    local_only = typeof local_only !== 'undefined' ? local_only : false;
     for(var i = 0; i < this.notes.length; i++) {
         var n = this.notes[i];
         if(n.pos == note.pos && n.pitch == note.pitch) {
@@ -102,18 +121,22 @@ Track.prototype.addNote = function(note) {
         }
     }
     this.notes.push(note);
-    console.log(this.instrument);
-    editNote(note.pitch * 2, note.length, this.instrument, note.pos);
+    if(!local_only) {
+        editNote(note.pitch * 2, note.length, this.instrument, note.pos);
+    }
 }
 
-Track.prototype.removeNoteAtPos = function(pos, pitch) {
+Track.prototype.removeNoteAtPos = function(pos, pitch, local_only) {
+    local_only = typeof local_only !== 'undefined' ? local_only : false;
     for(var i = 0; i < this.notes.length; i++) {
         var note = this.notes[i];
         if(note.pos == pos && note.pitch == pitch) {
             this.notes.splice(i, 1);
         }
     }
-    editNote(pitch * 2, 0, this.instrument, pos);
+    if(!local_only) {
+        editNote(pitch * 2, 0, this.instrument, pos);
+    }
 }
 
 Track.getSnap = function() {

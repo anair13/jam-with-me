@@ -116,6 +116,7 @@ function init() {
 myDataRef.on('child_added', function(snapshot) {
   var message = snapshot.val();
   playNote(message.step, message.length, message.type, message.position);
+  handleNewNote(message.position, message.length, message.step, message.type);
 });
 }
 
