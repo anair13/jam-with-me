@@ -124,6 +124,22 @@ function init() {
 
         Controller.handleNewNote(message.position, message.length, message.step, message.type);
     });
+
+    var chatDataRef = new Firebase(firebase_chat_identifier);
+    $('#message').keypress(function (e) {
+        if (e.keyCode == 13) {
+          var name = "bob"; //username;
+          var text = $('#message').val();
+          chatDataRef.push({name: name, text: text});
+          $('#message').val('');
+           
+        }
+    });
+
+    chatDataRef.on('child_added', function(snapshot) {
+      var message = snapshot.val();
+      displayChatMessage(message.name, message.text);
+    });
 }
 
 function playNote(step, length, type, position) {
@@ -165,45 +181,15 @@ function playback() {
     });
 }
 
-var chatDataRef = new Firebase(firebase_chat_identifier);
-$('#message').keypress(function (e) {
-    if (e.keyCode == 13) {
-      var name = username;
-      var text = $('#message').val();
-      chatDataRef.push({name: name, text: text});
-      $('#message').val('');
-       
-    }
-});
-chatDataRef.on('child_added', function(snapshot) {
-  var message = snapshot.val();
-  displayChatMessage(message.name, message.text);
-});
 function displayChatMessage(name, text) {
   $('<div/>').text(text).prepend($('<em/>').text(name+': ')).appendTo($('#messagesDiv'));
   $('#messagesDiv')[0].scrollTop = $('#messagesDiv')[0].scrollHeight;
+}
 
-// function stopRecording() {
-//     rec.stop();
-//     createDownloadLink();
-    
-//     rec.clear();
-//   }
-
-// function createDownloadLink() {
-//     rec && recorder.exportWAV(function(blob) {
-//       var url = URL.createObjectURL(blob);
-//       var li = document.createElement('li');
-//       var au = document.createElement('audio');
-//       var hf = document.createElement('a');
-      
-//       au.controls = true;
-//       au.src = url;
-//       hf.href = url;
-//       hf.download = new Date().toISOString() + '.wav';
-//       hf.innerHTML = hf.download;
-//       li.appendChild(au);
-//       li.appendChild(hf);
-//       recordingslist.appendChild(li);
-//     });
-// }
+function newSong() {
+    var xmlHttp = null;
+    xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("GET", "./new", false);
+    xmlHttp.send( null );
+    return xmlHttp.responseText;
+}
