@@ -229,7 +229,7 @@ window.onmousemove = function(e) {
         var maxy = 5 + tri * Track.trackSpacing + Track.lineSpacing * 6.5;
         if(minx <= mx && miny <= my && my <= maxy) {
             // Get pos, pitch
-            var pos = Math.floor((mx - Track.leftOffset) * Track.getSnap() / Track.measureSpacing) * 32 / Track.getSnap();
+            var pos = Math.round((mx - Track.leftOffset) * Track.getSnap() / Track.measureSpacing) * 32 / Track.getSnap();
             var pitch = Math.floor((((5 + tri * Track.trackSpacing + 6.5 * Track.lineSpacing) - my) / Track.lineSpacing) * 2) / 2;
 
             var x = -4 + Track.leftOffset + parseInt($("#track-container").css("margin-left"), 10) + Track.measureSpacing * pos / 32;
@@ -272,7 +272,7 @@ window.onclick = function(e) {
         var miny = 5 + tri * Track.trackSpacing - Track.lineSpacing * 1.5;
         var maxy = 5 + tri * Track.trackSpacing + Track.lineSpacing * 6.5;
         if(minx <= mx && miny <= my && my <= maxy) {
-            var pos = Math.floor((mx - Track.leftOffset) * Track.getSnap() / Track.measureSpacing) * 32 / Track.getSnap();
+            var pos = Math.round((mx - Track.leftOffset) * Track.getSnap() / Track.measureSpacing) * 32 / Track.getSnap();
             var length = Track.getLength();
             var pitch = Math.floor((((5 + tri * Track.trackSpacing + 3.5 * Track.lineSpacing) - my) / Track.lineSpacing) * 2) / 2;
 
