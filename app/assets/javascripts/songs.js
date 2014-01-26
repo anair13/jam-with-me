@@ -25,11 +25,8 @@ function editNote(step, length, type, position) {
 
     if (length == 0) {
         noteRefs[notemap.indexOf([step, type, position].toString())].remove();
-        console.log(notemap);
-        console.log(noteRefs);
     } else {
         noteRefs.unshift(myDataRef.push());
-        console.log("noteRefs: ", noteRefs);
         noteRefs[0].set({
             step: step,
             length: length,
@@ -37,7 +34,6 @@ function editNote(step, length, type, position) {
             position: position
         });
         notemap.unshift([step, type, position].toString());
-        console.log("notemap: ", notemap);
         $('#position').val('');
     }
 }
@@ -176,7 +172,6 @@ function playNote(step, length, type, position) {
     default:
         bufferIndex = -1;
     }
-    console.log(step, length, type, position);
     var timeOn = playbackStartTime + position * atomNoteTime;
     var timeOff = timeOn + (32 / length) * atomNoteTime;
     var source = getTone(step, bufferIndex);
