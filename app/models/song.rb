@@ -3,8 +3,7 @@ class Song < ActiveRecord::Base
   after_create :generate_firebase_identifier
 
   def age
-    puts (1000.0 * Time.now.to_f).to_i - :firebase_identifier[7..:firebase_identifier.size].to_i
-    (1000.0 * Time.now.to_f).to_i - :firebase_identifier[7..:firebase_identifier.size].to_i
+    (1000.0 * Time.now.to_f).to_i - firebase_identifier[7..-1].to_i
   end
 
   def frozen
