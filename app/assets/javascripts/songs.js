@@ -9,12 +9,11 @@ var buffers = new Array();
 var notes = new Array();
 var notemap = new Array();
 var noteRefs = new Array();
-var endTime;
 var playbackStartTime = context.currentTime + 0.100;
 var tempo = 80; // BPM (beats per minute)
 var atomNoteTime = (60 / tempo) / 8; // 32nd note
 
-var MINUTES = 20;
+var MINUTES = 1;
 var d = new Date();
 var startTime = d.getTime();
 var myDataRef;
@@ -45,38 +44,32 @@ function displayChatMessage(step, length) {
     $('#chat-messages').scrollTop = $('#chat-messages').scrollHeight;
 };
 
-function killSession() {
-    var n = d.getTime();
-    var endTime = n + MINUTES * 60 * 1000;
-    thissession.set({
-        ID: n,
-        endTime: endTime
-    });
-    location.reload(true);
-}
-
 function get_elapsed_time_string(total_seconds) {
     function pretty_time_string(num) {
         return (num < 10 ? "0" : "") + num;
     }
 
-    var hours = Math.floor(total_seconds / 3600);
-    total_seconds = total_seconds % 3600;
+    if (total_seconds >= 0) {
+        var hours = Math.floor(total_seconds / 3600);
+        total_seconds = total_seconds % 3600;
 
-    var minutes = Math.floor(total_seconds / 60);
-    total_seconds = total_seconds % 60;
+        var minutes = Math.floor(total_seconds / 60);
+        total_seconds = total_seconds % 60;
 
-    var seconds = Math.floor(total_seconds);
+        var seconds = Math.floor(total_seconds);
 
-    // Pad the minutes and seconds with leading zeros, if required
-    hours = pretty_time_string(hours);
-    minutes = pretty_time_string(minutes);
-    seconds = pretty_time_string(seconds);
+        // Pad the minutes and seconds with leading zeros, if required
+        hours = pretty_time_string(hours);
+        minutes = pretty_time_string(minutes);
+        seconds = pretty_time_string(seconds);
 
-    // Compose the string for display
-    var currentTimeString = hours + ":" + minutes + ":" + seconds;
-
-    return currentTimeString;
+        // Compose the string for display
+        var currentTimeString = hours + ":" + minutes + ":" + seconds;
+        return currentTimeString;
+    }
+    else {
+        return "Next song in " + (20 + total_seconds);
+    }
 }
 
 function init() {
@@ -106,16 +99,15 @@ function init() {
     thissession.on('value', function (snapshot) {
         var session = snapshot.val();
         var ID = session.ID;
-        endTime = session.endTime;
-
-        setInterval(function () {
-            var thisDate = new Date();
-            $('#timer').text(get_elapsed_time_string(Math.floor((endTime - thisDate.getTime()) / 1000)));}, 1000);
-            if(endTime < thisDate.getTime()){
-                alert("this is a problem!");
-                $('#error').text('<p style="color:red">This Session has expired</p>');
-            }
     });
+
+    setInterval(function () {
+        var thisDate = new Date();
+        $('#timer').text(get_elapsed_time_string(Math.floor((endTime - thisDate.getTime()) / 1000)));
+        if(endTime < thisDate.getTime() && endTime + 1000 > thisDate.getTime()) {
+            transition();
+        }
+    }, 1000);
 
     myDataRef = new Firebase(firebase_song_identifier);
     myDataRef.on('child_added', function (snapshot) {
@@ -206,6 +198,7 @@ function displayChatMessage(name, text) {
   $("#chat-messages").val(oldtext);
   l('chat-messages').scrollTop = l('chat-messages').scrollHeight;
 }
+
 function displayUser(user) {
     var users = $("#chat-users").val();
     users += user + "\n";
@@ -214,9 +207,10 @@ function displayUser(user) {
 }
 
 function newSong() {
-    var xmlHttp = null;
-    xmlHttp = new XMLHttpRequest();
-    xmlHttp.open("GET", "./new", false);
-    xmlHttp.send( null );
-    return xmlHttp.responseText;
+    window.open("./new","_self");
+}
+
+function transition() {
+    setTimeout(newSong, 20000);
+    playback();
 }
