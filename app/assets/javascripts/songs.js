@@ -111,13 +111,14 @@ function init() {
 
         setInterval(function () {
             var thisDate = new Date();
-            $('#box_header').text(get_elapsed_time_string(Math.floor((endTime - thisDate.getTime()) / 1000)));
+            $('#timer').text(get_elapsed_time_string(Math.floor((endTime - thisDate.getTime()) / 1000)));
         }, 1000);
     });
 
     myDataRef = new Firebase(firebase_song_identifier);
     myDataRef.on('child_added', function (snapshot) {
         var message = snapshot.val();
+        notemap.unshift([message.step, message.type, message.position].toString());
         playNote(message.step, message.length, message.type, 0.1);
         Controller.handleNewNote(message.position, message.length, message.step, message.type);
     });
