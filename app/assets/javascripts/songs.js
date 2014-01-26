@@ -111,11 +111,6 @@ function init() {
         setInterval(function () {
             var thisDate = new Date();
             $('#timer').text(get_elapsed_time_string(Math.floor((endTime - thisDate.getTime()) / 1000)));}, 1000);
-            console.log(endTime - thisDate.getTime());
-            if(endTime < thisDate.getTime()){
-                alert("this is a problem!");
-                $('#error').text('<p style="color:red">This Session has expired</p>');
-            }
     });
 
     myDataRef = new Firebase(firebase_song_identifier);
