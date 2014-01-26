@@ -327,6 +327,7 @@ window.onclick = function(e) {
             var action = Track.getAction();
             if(action == "add") {
                 tr.addNote(new Note(pos, length, pitch));
+                playNoteNow(pitch, length, tr.instrument, 1);
             }
             else if(action == "remove") {
                 tr.removeNoteAtPos(pos, pitch);
