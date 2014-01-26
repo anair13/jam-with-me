@@ -148,7 +148,7 @@ function init() {
     dataUserRef.on('child_added', function(snapshot) {
         var user = snapshot.val();
         displayUser(user.user);
-    })
+    });
 
 }
 
