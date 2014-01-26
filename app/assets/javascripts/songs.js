@@ -185,6 +185,7 @@ function displayChatMessage(name, text) {
   var oldtext = $("#chat-messages").val();
   oldtext += name + ": " + text + "\n";
   $("#chat-messages").val(oldtext);
+  $('#chat-messages').scrollTop = $('#chat-messages').scrollHeight;
 }
 
 function newSong() {
