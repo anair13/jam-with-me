@@ -2,12 +2,6 @@
 // All this logic will automatically be available in application.js.
 // You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 var context = new AudioContext();
-<<<<<<< HEAD
-=======
-var firebase_song_identifier = "https://jamwithme.firebaseio.com/music/<%= @song.firebase_identifier %>";
-var firebase_chat_identifier = "https://jamwithme.firebaseio.com/chat/<%= @song.firebase_identifier %>";
-var firebase_userlist_identifier = "https://jamwithme.firebaseio.com/users/<%= @song.firebase_identifier %>";
->>>>>>> b863ee09e76674c4c83e9c749f7b5ba041d8d769
 window.onload = init;
 var bufferLoader;
 
@@ -184,7 +178,6 @@ function playback() {
     });
 }
 
-<<<<<<< HEAD
 var chatDataRef = new Firebase(firebase_chat_identifier);
 var name;
 $('#message').keypress(function (e) {
@@ -196,42 +189,17 @@ $('#message').keypress(function (e) {
        
     }
 });
+
 chatDataRef.on('child_added', function(snapshot) {
   var message = snapshot.val();
   displayChatMessage(message.name, message.text);
 });
-/*
-function displayChatMessage(name, text) {
-  $('<div/>').text(text).prepend($('<em/>').text(name+': ')).appendTo($('#messagesDiv'));
-  $('#messagesDiv')[0].scrollTop = $('#messagesDiv')[0].scrollHeight; */
-$('#name').keypress(function (e)) {
+
+$('#name').keypress(function (e) {
     name = $('#name').val();
     $('#name').val('');
-}
-// function stopRecording() {
-//     rec.stop();
-//     createDownloadLink();
-    
-//     rec.clear();
-//   }
+});
 
-// function createDownloadLink() {
-//     rec && recorder.exportWAV(function(blob) {
-//       var url = URL.createObjectURL(blob);
-//       var li = document.createElement('li');
-//       var au = document.createElement('audio');
-//       var hf = document.createElement('a');
-      
-//       au.controls = true;
-//       au.src = url;
-//       hf.href = url;
-//       hf.download = new Date().toISOString() + '.wav';
-//       hf.innerHTML = hf.download;
-//       li.appendChild(au);
-//       li.appendChild(hf);
-//       recordingslist.appendChild(li);
-//     });
-// }
 function displayChatMessage(name, text) {
   var oldtext = $("#chat-messages").val();
   oldtext += name + ": " + text + "\n";
