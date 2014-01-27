@@ -106,7 +106,14 @@ function init() {
         var thisDate = new Date();
         $('#timer').text(get_elapsed_time_string(Math.floor((endTime - thisDate.getTime()) / 1000)));
         if(endTime < thisDate.getTime() && endTime + 1000 > thisDate.getTime()) {
-            transition();
+            playback();
+        }
+    }, 1000);
+
+    setInterval(function () {
+        var thisDate = new Date();
+        if(endTime + 20000 < thisDate.getTime()) {
+            newSong();
         }
     }, 1000);
 
@@ -248,11 +255,6 @@ function displayUser(user) {
 
 function newSong() {
     window.open("./new","_self");
-}
-
-function transition() {
-    setTimeout(newSong, 20000);
-    playback();
 }
 
 function setCookie(cname,cvalue,exdays) {
