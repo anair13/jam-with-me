@@ -11,3 +11,4 @@ Authors
 Ashvin Nair  
 Saavan Patel  
 Roy Tu  
+Sidharth Goel
